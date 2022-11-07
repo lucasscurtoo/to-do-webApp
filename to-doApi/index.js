@@ -21,7 +21,6 @@ const auth = require('./src/routes/auth');
 const validateToken = require('./src/middlewares/validate-token')
 const toDO = require('./src/routes/to-do')
 
-
 app.use("/auth", auth);
 app.use("/toDo", validateToken, toDO);
 

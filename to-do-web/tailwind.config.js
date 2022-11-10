@@ -14,10 +14,10 @@ module.exports = {
       },
       colors: {
         grayColor: "#C4C4C4",
+        mediumGray: "#9B9B9B",
         darkGray: "#616161",
         blueColor: "#29B6F6",
         secondGrayColor: "#F4F4F4",
-        mediumGray: "#9B9B9B"
       },
       spacing: {
         '25%': '25%',

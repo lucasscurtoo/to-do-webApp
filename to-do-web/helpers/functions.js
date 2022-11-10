@@ -7,8 +7,6 @@ export const defaultList = [{
 }]
 
 export const checkIfExists = (data, item) => {
-    console.log(data, item)
-    console.log('exitse', data.some(elem => elem.title === item))
     if (data.some(elem => elem.title === item)){
         return true
      }else {

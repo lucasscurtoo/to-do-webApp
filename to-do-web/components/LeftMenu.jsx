@@ -1,41 +1,40 @@
 import { useState, useRef, useEffect } from "react";
-import {
-  ChevronLeftIcon,
-  DocumentDuplicateIcon,
-  PlusIcon,
-} from "@heroicons/react/24/outline";
+import { ChevronLeftIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { checkIfExists, defaultList } from "../helpers/functions";
 import { toDoCreateList, toDoGetLists } from "../api/toDo";
 import CustomToast from "./CustomToast";
+import DocumentIcon from "../assets/icons/document-icon.svg";
 
-const LeftMenu = () => {
+const LeftMenu = ({ close, selectedList }) => {
   const [lists, setLists] = useState(defaultList);
   const [showToast, setShowToast] = useState(false);
   const [listCreated, setListCreated] = useState();
   const [listExists, setListExists] = useState(false);
+  const [selectedListStyle, setSelectedListStyle] = useState(
+    defaultList[0].title
+  );
   const newList = useRef(null);
 
-    useEffect(() => {
-            toDoGetLists().then(response => {
-                console.log(response)
-                if (response.status === 200){
-                    setLists(response.data)
-                }
-            })
-    }, [])
-    
-  
   useEffect(() => {
-    console.log(lists)
+    toDoGetLists().then((response) => {
+      console.log(response);
+      if (response.status === 200) {
+        setLists(response.data);
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    console.log(lists);
   }, [lists]);
 
   const createNewList = (listName) => {
-    const listExists = checkIfExists(lists, listName)
-    console.log(listExists)
-      if (listExists) {
-        setShowToast(true);
-        setListExists(true);
-      }else{
+    const listExists = checkIfExists(lists, listName);
+    console.log(listExists);
+    if (listExists) {
+      setShowToast(true);
+      setListExists(true);
+    } else {
       setLists((lists) => [
         ...lists,
         {
@@ -66,26 +65,50 @@ const LeftMenu = () => {
       newList.current.blur();
     }
   };
+
+  const handleSelectedList = (list) => {
+    selectedList(list);
+    setSelectedListStyle(list.title);
+  };
+
+  const handleLogOut = () => {
+    console.log("in progress xd");
+  };
+
   return (
-    <div className="bg-white w-1/6 h-full">
+    <div className="bg-white w-full h-full menuLeftShadow">
       <CustomToast
         show={showToast}
         close={() => setShowToast(false)}
         notifi={
-         (listCreated === false && "There was an error creating the list, try again") ||
+          (listCreated === false &&
+            "There was an error creating the list, try again") ||
           (listExists && "List already exists, cant be created")
         }
         state={listCreated}
       />
       <div className="py-6 px-4 h-full flex flex-col">
-        <section className="w-full flex items-center">
+        <section
+          onClick={() => close(true)}
+          className="w-full flex items-center cursor-pointer"
+        >
           <ChevronLeftIcon className="w-8 text-mediumGray" />
           <p className="text-mediumGray font-thin">Close</p>
         </section>
-        <section className="w-full flex mt-24 text-[#5B5B5B] flex-col">
+        <section className="w-full flex mt-24 text-mediumGray flex-col">
           {lists.map((list) => (
-            <div className="flex w-full items-center" key={list.title}>
-              <DocumentDuplicateIcon className="w-8 mr-4" />
+            <div
+              className={`flex w-full items-center ${
+                selectedListStyle === list.title
+                  ? "text-black"
+                  : "text-mediumGray"
+              }`}
+              key={list.title}
+              onClick={() => handleSelectedList(list)}
+            >
+              <DocumentIcon
+                stroke={selectedListStyle === list.title ? "black" : "gray"}
+              />
               <h2 className="truncate block">{list.title}</h2>
             </div>
           ))}
@@ -100,7 +123,7 @@ const LeftMenu = () => {
           </section>
         </section>
         <section className="w-full mt-auto">
-          <h2>Log out</h2>
+          <h2 onClick={handleLogOut}>Log out</h2>
         </section>
       </div>
     </div>

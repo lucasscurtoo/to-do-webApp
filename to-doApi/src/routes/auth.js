@@ -3,7 +3,7 @@ const User = require('../models/user');
 const Joi = require('@hapi/joi')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken');
-const List = require('../models/list');
+const createList = require('../dao/createList');
 
 const schemaRegister = Joi.object({ //validacion
     username: Joi.string().min(4).required(),
@@ -31,15 +31,10 @@ auth.post('/register', async (req, res) => {
         username: req.body.username,
         password: hashedPassword
     });
-    const list = new List({
-        title: 'My list',
-        todo: [],
-        user: {username: req.body.username}
-    })
 
     try {
         user.save()
-        list.save()
+        createList("", req.body.username)
     
         const token = jwt.sign({
             username: user.username,

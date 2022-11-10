@@ -1,5 +1,6 @@
 const toDO = require('express').Router()
 const Joi = require('@hapi/joi')
+const createList = require('../dao/createList')
 const List = require('../models/list')
 const User = require('../models/user')
 
@@ -16,14 +17,8 @@ toDO.post('/createList', async (req,res) => {
     const listExists = await List.findOne({title: req.body.title, user:{username: req.body.username}})
     if (listExists) return res.status(400).json({error: true, message: "List already exists", status: 400})
 
-    const list = new List({
-        title: req.body.title,
-        todo: [],
-        user: {username: req.body.username}
-    })
-
     try {
-        list.save()
+        createList(req.body.title, req.body.username)
 
         res.json({
             status: 200,

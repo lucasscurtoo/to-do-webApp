@@ -1,10 +1,9 @@
-/* eslint-disable no-unused-vars */
-const express = require('express');
-const auth = express.Router();
+const auth = require('express').Router();
 const User = require('../models/user');
 const Joi = require('@hapi/joi')
 const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
+const List = require('../models/list');
 
 const schemaRegister = Joi.object({ //validacion
     username: Joi.string().min(4).required(),
@@ -32,10 +31,16 @@ auth.post('/register', async (req, res) => {
         username: req.body.username,
         password: hashedPassword
     });
+    const list = new List({
+        title: 'My list',
+        todo: [],
+        user: {username: req.body.username}
+    })
 
     try {
         user.save()
-        
+        list.save()
+    
         const token = jwt.sign({
             username: user.username,
             id: user._id

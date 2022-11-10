@@ -34,6 +34,7 @@ const Login = () => {
           if (response.status === 200) {
             setLogged(true);
             localStorage.setItem("token", response.data.token);
+            localStorage.setItem("username", values.username)
             router.push("/ToDo");
           } else {
             setLogged(false);

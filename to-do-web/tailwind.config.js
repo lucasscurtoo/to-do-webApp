@@ -16,6 +16,16 @@ module.exports = {
         grayColor: "#C4C4C4",
         darkGray: "#616161",
         blueColor: "#29B6F6",
+        secondGrayColor: "#F4F4F4",
+        mediumGray: "#9B9B9B"
+      },
+      spacing: {
+        '25%': '25%',
+        '85%': '85%',
+        '90%': '90%',
+        '95%': '95%',
+        '128': '32rem',
+        '132': '40rem'
       },
     },
   },

@@ -40,7 +40,7 @@ const Task = ({ itsNew, todo }) => {
                   type="checkbox"
                   onChange={() => handleOnCheck(todo.description)}
                   />
-                  <div className="checkboxRound-input bg-red-200"></div>
+                  <div className="checkboxRound-input"></div>
                 </label>  
             </div>
           </div>

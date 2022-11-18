@@ -64,7 +64,7 @@ const ToDo = () => {
             {list.todo.map((task) => (
               <Task itsNew={false} todo={task} key={task.description} />
             ))}
-            <div className="w-ful">
+            <div className="w-full">
               <section className="flex">
                 <h2 className="text-blueColor">Completed</h2>
                   <ChevronUpIcon

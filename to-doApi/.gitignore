@@ -4,7 +4,8 @@
 /node_modules
 /.pnp
 .pnp.js
-
+*node_modules/*
+**/node_modules
 # testing
 /coverage
 
@@ -35,3 +36,4 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .env
+node_modules/

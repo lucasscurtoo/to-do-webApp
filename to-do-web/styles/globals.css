@@ -4,6 +4,10 @@
 @tailwind components;
 @tailwind utilities;
 
+:root{
+  --primaryBlue: #29B6F6;
+}
+
 input {
   border: none;
   outline: none;
@@ -33,3 +37,4 @@ input:focus {
 .menuLeftShadow {
   box-shadow: 0 0 0 1px rgb(0 0 0 / 0.1), 0 0 0 2px rgb(0 0 0 / 0.1);
 }
+

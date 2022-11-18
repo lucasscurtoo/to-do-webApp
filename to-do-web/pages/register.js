@@ -1,16 +1,16 @@
-import { useState } from "react";
-import { useRouter } from "next/router";
-import Link from "next/link";
-import { useFormik } from "formik";
-import { registerValidation } from "../helpers/validation";
-import { EyeSlashIcon, EyeIcon } from "@heroicons/react/24/outline";
-import { authRequest } from "../api/auth";
+import { useState } from "react"
+import { useRouter } from "next/router"
+import Link from "next/link"
+import { useFormik } from "formik"
+import { registerValidation } from "../helpers/validation"
+import { EyeSlashIcon, EyeIcon } from "@heroicons/react/24/outline"
+import { authRequest } from "../api/auth"
 
 const Register = () => {
-  const [showPassword, setShowPassword] = useState(false);
-  const [showRepeatedPassword, setShowRepeatedPassword] = useState(false);
-  const [logged, setLogged] = useState(null);
-  const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false)
+  const [showRepeatedPassword, setShowRepeatedPassword] = useState(false)
+  const [logged, setLogged] = useState(null)
+  const router = useRouter()
 
   const formik = useFormik({
     initialValues: {
@@ -24,18 +24,18 @@ const Register = () => {
       authRequest(values.username, values.password, "/register").then(
         (response) => {
           if (response.status === 200) {
-            setLogged(true);
-            localStorage.setItem("token", response.data.token);
-            localStorage.setItem("username", values.username);
-            router.push("/ToDo");
+            setLogged(true)
+            localStorage.setItem("token", response.data.token)
+            localStorage.setItem("username", values.username)
+            router.push("/ToDo")
           } else {
-            setLogged(false);
+            setLogged(false)
             console.log(response)
           }
         }
-      );
+      )
     },
-  });
+  })
 
   return (
     <div className="w-screen h-screen bg-background1 bg-cover bg-no-repeat">
@@ -156,7 +156,7 @@ const Register = () => {
         </div>
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default Register;
+export default Register

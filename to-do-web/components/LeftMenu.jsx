@@ -20,13 +20,14 @@ const LeftMenu = ({ close, selectedList }) => {
       console.log(response);
       if (response.status === 200) {
         setLists(response.data);
+        setSelectedListStyle(response.data[0].title)
       }
     });
   }, []);
 
   useEffect(() => {
-    console.log(lists);
-  }, [lists]);
+    console.log(selectedListStyle);
+  }, [selectedListStyle]);
 
   const createNewList = (listName) => {
     const listExists = checkIfExists(lists, listName);
@@ -68,7 +69,7 @@ const LeftMenu = ({ close, selectedList }) => {
 
   const handleSelectedList = (list) => {
     selectedList(list);
-    setSelectedListStyle(list.title);
+    setSelectedListStyle(list);
   };
 
   const handleLogOut = () => {

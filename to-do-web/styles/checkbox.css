@@ -1,0 +1,63 @@
+:root{
+    --primaryBlue: #29B6F6;
+}
+
+.checkboxRound-contain *,heckboxRound
+.checkboxRound-contain *::before,
+.checkboxRound-contain *::after {
+  box-sizing: content-box !important;
+}
+
+.checkboxRound-contain input {
+  z-index: -1;
+  opacity: 0;
+}
+
+
+.checkboxRound-contain {
+  position: relative;
+  padding-left: 2rem;
+  cursor: pointer;
+}
+
+.checkboxRound-contain input[type="checkbox"] ~ .checkboxRound-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  height: 1.75rem;
+  width:  1.75rem;
+  transition: background 250ms;
+  border: 1px solid var(--primaryBlue);
+  border-radius: 10rem;
+}
+
+.checkboxRound-contain input[type="checkbox"] ~ .checkboxRound-input::after {
+  content: "";
+  position: absolute;
+  display: none;
+  left: 10px;
+  top: 3px;
+  width: 0.4rem;
+  height: 1rem;
+  border-width: 0 2px 2px 0;
+  transition: background 250ms;
+  transform: rotate(45deg);
+}
+
+.checkboxRound-contain input:checked ~ .checkboxRound-input::after {
+  display: block;
+}
+
+.checkboxRound-contain:hover input[type="checkbox"]:not([disabled]) ~ .checkboxRound-input,
+.checkboxRound-contain input[type="checkbox"]:focus ~ .checkboxRound-input {
+  border: 1px solid var(--primaryBlue);
+}
+
+.checkboxRound-contain input[type="checkbox"]:checked ~ .checkboxRound-input {
+  background: var(--primaryBlue);
+}
+.checkboxRound-contain:hover input[type="checkbox"]:not([disabled]):checked ~ .checkboxRound-input,
+.checkboxRound-contain input[type="checkbox"]:checked:focus ~ .checkboxRound-input {
+    background: var(--primaryBlue);
+}

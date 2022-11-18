@@ -10,12 +10,20 @@ dotenv.config();
 const app = express();
 const port = 7000
 
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => {
+        console.log(`CONNECTED TO MONGO!`);
+    })
+    .catch((err) => {
+        console.log(`OH NO! MONGO CONNECTION ERROR!`);
+        console.log(err);
+    })
 //middlewares
 app.use(express.json())
 app.use(cors());
 app.use(morgan('dev'))
 
-mongoose.connect(process.env.MONGODB_URI);
+
 
 const auth = require('./src/routes/auth');
 const validateToken = require('./src/middlewares/validate-token')
@@ -27,3 +35,4 @@ app.use("/toDo", validateToken, toDO);
 app.listen(port, () => 
     console.log('server running on port', port)
 )
+

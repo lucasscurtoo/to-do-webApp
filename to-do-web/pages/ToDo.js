@@ -35,18 +35,11 @@ const ToDo = () => {
     )
   }, [list])
 
-  useEffect(() => {
-    (tasks, completedTask)
-  }, [tasks,completedTask])
-
   const handleSelectedList = (incominglist) => {
     setList(incominglist)
   }
 
   const handleCompleted = (value) => {
-    ("completed", value)
-    ('TASKS',tasks)
-    //manejar aca cuando llamar a uno y cuando llamar al otro
     if (!tasks.some(currentTask => currentTask.description === value.description)) {
       handleTasks(value)
     }
@@ -76,8 +69,7 @@ const ToDo = () => {
 
   const handleNewTask = (values) => {
     if (!tasks.some(currentTask => currentTask.description === values.description)) {
-      ('hola')
-      setTasks((prevState) => getUnique([...prevState, values]))
+     setTasks((prevState) => getUnique([...prevState, values]))
       setRepeatedTask(false)
     }else{
       setRepeatedTask(true)

@@ -17,7 +17,6 @@ const LeftMenu = ({ close, selectedList }) => {
 
   useEffect(() => {
     toDoGetLists().then((response) => {
-      (response);
       if (response.status === 200) {
         setLists(response.data);
         setSelectedListStyle(response.data[0].title)
@@ -25,13 +24,8 @@ const LeftMenu = ({ close, selectedList }) => {
     });
   }, []);
 
-  useEffect(() => {
-    (selectedListStyle);
-  }, [selectedListStyle]);
-
   const createNewList = (listName) => {
     const listExists = checkIfExists(lists, listName);
-    (listExists);
     if (listExists) {
       setShowToast(true);
       setListExists(true);
@@ -47,7 +41,6 @@ const LeftMenu = ({ close, selectedList }) => {
         },
       ]);
       toDoCreateList(listName).then((response) => {
-        (response.status);
         if (response.status === 400) {
           setListCreated(false);
           setShowToast(true);
@@ -73,7 +66,7 @@ const LeftMenu = ({ close, selectedList }) => {
   };
 
   const handleLogOut = () => {
-    ("in progress xd");
+    console.log("Not implemented yet");
   };
 
   return (

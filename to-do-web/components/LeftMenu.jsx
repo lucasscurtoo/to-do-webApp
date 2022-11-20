@@ -17,7 +17,7 @@ const LeftMenu = ({ close, selectedList }) => {
 
   useEffect(() => {
     toDoGetLists().then((response) => {
-      console.log(response);
+      (response);
       if (response.status === 200) {
         setLists(response.data);
         setSelectedListStyle(response.data[0].title)
@@ -26,12 +26,12 @@ const LeftMenu = ({ close, selectedList }) => {
   }, []);
 
   useEffect(() => {
-    console.log(selectedListStyle);
+    (selectedListStyle);
   }, [selectedListStyle]);
 
   const createNewList = (listName) => {
     const listExists = checkIfExists(lists, listName);
-    console.log(listExists);
+    (listExists);
     if (listExists) {
       setShowToast(true);
       setListExists(true);
@@ -47,7 +47,7 @@ const LeftMenu = ({ close, selectedList }) => {
         },
       ]);
       toDoCreateList(listName).then((response) => {
-        console.log(response.status);
+        (response.status);
         if (response.status === 400) {
           setListCreated(false);
           setShowToast(true);
@@ -73,7 +73,7 @@ const LeftMenu = ({ close, selectedList }) => {
   };
 
   const handleLogOut = () => {
-    console.log("in progress xd");
+    ("in progress xd");
   };
 
   return (

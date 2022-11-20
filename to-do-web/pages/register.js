@@ -30,7 +30,7 @@ const Register = () => {
             router.push("/ToDo")
           } else {
             setLogged(false)
-            console.log(response)
+            (response)
           }
         }
       )

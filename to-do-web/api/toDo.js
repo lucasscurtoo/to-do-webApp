@@ -1,7 +1,7 @@
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 export const toDoCreateList = async (newListTitle) => {
-  return await fetch(`${BASE_URL}/toDo/createList`, {
+  return await fetch(`${BASE_URL}/lists/createList`, {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -17,7 +17,7 @@ export const toDoCreateList = async (newListTitle) => {
 
 export const toDoGetLists = async () => {
   const username = localStorage.getItem("username")
-  return await fetch(`${BASE_URL}/toDo/getUserLists?username=${username}`, {
+  return await fetch(`${BASE_URL}/lists/getUserLists?username=${username}`, {
     method: "GET",
     headers: {
       Accept: "application/json",

@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { ChevronLeftIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { checkIfExists, defaultList } from "../helpers/functions";
-import { toDoCreateList, toDoGetLists } from "../api/toDo";
+import { toDoCreateList, toDoGetLists } from "../api/lists";
 import CustomToast from "./CustomToast";
 import DocumentIcon from "../assets/icons/document-icon.svg";
 
@@ -62,7 +62,7 @@ const LeftMenu = ({ close, selectedList }) => {
 
   const handleSelectedList = (list) => {
     selectedList(list);
-    setSelectedListStyle(list);
+    setSelectedListStyle(list.title);
   };
 
   const handleLogOut = () => {
@@ -81,7 +81,7 @@ const LeftMenu = ({ close, selectedList }) => {
         }
         state={listCreated}
       />
-      <div className="py-6 px-4 h-full flex flex-col">
+      <div className="py-6 px-4 h-full flex flex-col menuLeftCounters">
         <section
           onClick={() => close(true)}
           className="w-full flex items-center cursor-pointer"
@@ -92,7 +92,7 @@ const LeftMenu = ({ close, selectedList }) => {
         <section className="w-full flex mt-24 text-mediumGray flex-col">
           {lists.map((list) => (
             <div
-              className={`flex w-full items-center ${
+              className={`flex w-full items-center menuLeftCounters ${
                 selectedListStyle === list.title
                   ? "text-black"
                   : "text-mediumGray"
@@ -100,16 +100,19 @@ const LeftMenu = ({ close, selectedList }) => {
               key={list.title}
               onClick={() => handleSelectedList(list)}
             >
-              <DocumentIcon
-                stroke={selectedListStyle === list.title ? "black" : "gray"}
-              />
-              <h2 className="truncate block">{list.title}</h2>
+              <div className="flex w-full items-center menuLeftListHovers py-2">
+                <DocumentIcon
+                  stroke={selectedListStyle === list.title ? "black" : "gray"}
+                  className="mr-2 min-w-max"
+                />
+                <h2 className="truncate">{list.title}</h2>
+              </div>
             </div>
           ))}
           <section className="flex mt-8">
-            <PlusIcon className="w-6 text-blueColor" />
+            <PlusIcon className="w-6 ml-2 text-blueColor" />
             <input
-              className="ml-2 w-36 placeholder:text-blueColor font-thin placeholders"
+              className="ml-2 w-36 placeholder:text-blueColor font-thin placeholders text-black"
               onKeyDown={handleKeyDown}
               ref={newList}
               placeholder="Create a new list"

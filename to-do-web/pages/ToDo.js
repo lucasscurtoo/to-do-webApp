@@ -2,11 +2,12 @@ import { useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import { useRedirect } from "../components/RedirectContext"
 import LeftMenu from "../components/LeftMenu"
-import { checkIfExists, defaultList, getUnique } from "../helpers/functions"
+import { defaultList, getUnique } from "../helpers/functions"
 import Task from "../components/Tasks"
 import { ChevronUpIcon, MoonIcon, SunIcon } from "@heroicons/react/24/outline"
 import { useDarkMode } from "../components/DarkModeContext"
 import CustomToast from "../components/CustomToast"
+import { toDoCreateTask } from "../api/tasks"
 
 const ToDo = () => {
   const [closeState, setCloseState] = useState(false)
@@ -28,15 +29,18 @@ const ToDo = () => {
   }, [])
 
   useEffect(() => {
-    list.todo.map((task) =>
+    tasks.map((task) =>
       task.completed === false
         ? setTasks((prevState) => getUnique([...prevState, task]))
-        : setCompletedTask((prevState) => [...prevState, task])
+        : setCompletedTask((prevState) => getUnique([...prevState, task]))
     )
   }, [list])
 
   const handleSelectedList = (incominglist) => {
     setList(incominglist)
+    setTasks(incominglist.todo)
+    setCompletedTask([])
+    setOpenCompleted(false)
   }
 
   const handleCompleted = (value) => {
@@ -68,9 +72,11 @@ const ToDo = () => {
   }
 
   const handleNewTask = (values) => {
+    console.log(values)
     if (!tasks.some(currentTask => currentTask.description === values.description)) {
      setTasks((prevState) => getUnique([...prevState, values]))
       setRepeatedTask(false)
+      toDoCreateTask(list.title, values.completed, values.description)
     }else{
       setRepeatedTask(true)
       setShowToast(true)

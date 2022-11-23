@@ -5,14 +5,14 @@ const createList = (title, username) => {
         const list = new List({
             title: "My List",
             todo: [],
-            user: {username: username}
+            username: username
         })
         list.save()
     }else{
         const list = new List({
             title: title,
             todo: [],
-            user: {username: username}
+            username: username
         })
         list.save()
     }

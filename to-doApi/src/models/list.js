@@ -9,9 +9,7 @@ const ListSchema = mongoose.Schema({
         type : Array , 
         "default" : [] 
     },
-    user: {
-        username: String
-    }
+    username: String
 })
 
 module.exports = mongoose.model('List', ListSchema)

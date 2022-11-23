@@ -38,3 +38,21 @@ input:focus {
   box-shadow: 0 0 0 1px rgb(0 0 0 / 0.1), 0 0 0 2px rgb(0 0 0 / 0.1);
 }
 
+
+.menuLeftCounters{
+  counter-increment: section;
+  counter-reset: section;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.menuLeftListHovers::before{
+  content: counters(section, '');
+  opacity: 0
+}
+
+.menuLeftListHovers:hover{
+  background-color: rgba(41, 182, 246, 0.5);
+  border-left: 2px solid var(--primaryBlue);
+}

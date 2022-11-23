@@ -12,10 +12,9 @@ const createTask = async (req,res) => {
     const {error} = taskSchema.validate(req.body)
     if (error) return res.status(400).json({error: error.details[0].message})
     
-    const list = await List.findOne({title: req.body.title, user: {username: req.body.username}})
+    const list = await List.findOne({title: req.body.title, username: req.body.username})
     if (!list) return res.status(404).json({error: true, message: "List doesnt exists", status: 404})
 
-    console.log(list.todo)
     const taskExists  = list.todo.some(elem => elem.description === req.body.description)
     if (taskExists) return res.status(400).json({error: true, message: "Task already exists", status:400})
 

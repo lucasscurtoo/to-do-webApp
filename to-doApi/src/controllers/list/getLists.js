@@ -2,7 +2,6 @@ const List = require('../../models/list')
 const User = require('../../models/user')
 
 const getUserLists = async (req,res) => {
-    console.log(req.query.username)
     if(!req.query.username) return res.status(400).json({error: true, message: "Username dont send", status:400})
 
     const userExists = await User.findOne({username: req.query.username})

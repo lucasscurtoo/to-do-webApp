@@ -23,7 +23,8 @@ const register = async (req,res) => {
 
     const user = new User({
         username: req.body.username,
-        password: hashedPassword
+        password: hashedPassword,
+        darkmode: false
     });
 
     try {

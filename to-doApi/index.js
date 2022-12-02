@@ -28,11 +28,13 @@ app.use(morgan('dev'))
 const auth = require('./src/routes/auth');
 const validateToken = require('./src/middlewares/validate-token')
 const lists = require('./src/routes/lists')
-const tasks = require('./src/routes/tasks')
+const tasks = require('./src/routes/tasks');
+const user = require('./src/routes/user');
 
 app.use("/auth", auth);
 app.use("/lists", validateToken, lists);
 app.use("/tasks", validateToken, tasks)
+app.use("/users", validateToken, user)
 
 app.listen(port, () => 
     console.log('server running on port', port)

@@ -8,7 +8,11 @@ const UserSchema = mongoose.Schema({
     password: {
         type: String,
         required: true
-    }
+    },
+    darkmode: {
+        type: Boolean,
+        required: true
+    }   
 });
 
 module.exports = mongoose.model('User', UserSchema);

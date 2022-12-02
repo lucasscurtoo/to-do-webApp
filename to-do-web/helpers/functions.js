@@ -15,5 +15,3 @@ export const checkIfExists = (data, item) => {
 }
 
 export const getUnique = (arr) => [...new Set(arr)]
-
-

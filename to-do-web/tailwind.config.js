@@ -6,9 +6,6 @@ module.exports = {
   ],
   theme: {
     extend: {
-      backgroundImage: {
-        background1: "url('../assets/images/background1.jpg')",
-      },
       fontFamily: {
         Poppins: ["Poppins", "cursive"],
       },
@@ -26,6 +23,9 @@ module.exports = {
         '95%': '95%',
         '128': '32rem',
         '132': '40rem'
+      },
+      minHeight: {
+        '20': '5rem'
       },
     },
   },

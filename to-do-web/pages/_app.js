@@ -1,15 +1,15 @@
 import DarkModeProvider from "../components/DarkModeContext"
 import RedirectProvider from "../components/RedirectContext"
-import "../styles/globals.css"
+import { Provider } from "react-redux";
+import store from "../redux/store"
+;import "../styles/globals.css"
 import "../styles/checkbox.css"
 
 function MyApp({ Component, pageProps }) {
   return (
-    <RedirectProvider>
-      <DarkModeProvider>
+    <Provider store={store}>
         <Component {...pageProps} />
-      </DarkModeProvider>
-    </RedirectProvider>
+    </Provider>
   )
 }
 

@@ -5,8 +5,7 @@ const getUserDarkMode = async (req,res) => {
     
     const user = await User.findOne({username: req.query.username})
     if (!user) return res.status(404).json({error: true, message: "User does'nt exists", status: 404})
-
-    console.log(user.darkmode)
+    
     res.json({
         status: 200,
         data: {darkmode: user.darkmode}

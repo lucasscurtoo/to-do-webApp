@@ -9,16 +9,14 @@ const schemaLogin = Joi.object({
 })
 
 const login = async (req,res) => {
-    //validamos los campos del body y si existe un error 
-    //nos devuele el mensaje del error en la validacion que usa joi
     const {error} = schemaLogin.validate(req.body)
     if (error) return res.status(400).json({error: error.details[0].message})
 
     const user = await User.findOne({ username: req.body.username})
-    if (!user) return res.status(404).json({error: true, message: 'Usuario no encontrado'})
+    if (!user) return res.status(404).json({error: true, message: 'User not found'})
 
     const passValid = await bcrypt.compare(req.body.password, user.password)
-    if (!passValid) return res.status(401).json({error: true, message: 'Contraseña incorrecta'})
+    if (!passValid) return res.status(401).json({error: true, message: 'Incorrect password'})
 
     const token = jwt.sign({
         username: user.username,

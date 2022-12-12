@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 const express = require('express');
 const morgan = require('morgan')
 const mongoose = require('mongoose');
@@ -12,13 +11,13 @@ const port = 7000
 
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
-        console.log(`CONNECTED TO MONGO!`);
+        console.log(`CONNECTED TO MONGO`);
     })
     .catch((err) => {
-        console.log(`OH NO! MONGO CONNECTION ERROR!`);
+        console.log(`NOT CONNECTED TO MONGO`);
         console.log(err);
     })
-//middlewares
+
 app.use(express.json())
 app.use(cors());
 app.use(morgan('dev'))

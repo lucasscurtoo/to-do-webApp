@@ -8,6 +8,19 @@
   --primaryBlue: #29B6F6;
 }
 
+html {
+  overflow: scroll;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  scrollbar-color: transparent transparent;
+}
+
+::-webkit-scrollbar {
+  width: 0;  
+  background: transparent; 
+  display: none;
+}
+
 input {
   border: none;
   outline: none;
@@ -19,6 +32,10 @@ input:focus {
 
 * {
   font-family: "Poppins";
+}
+
+.background1{
+  background-image: url('../assets/images/background1.jpg');
 }
 
 .black-overlay {
@@ -33,11 +50,6 @@ input:focus {
 .placeholders:focus::placeholder{
   color: #C4C4C4;
 }
-
-.menuLeftShadow {
-  box-shadow: 0 0 0 1px rgb(0 0 0 / 0.1), 0 0 0 2px rgb(0 0 0 / 0.1);
-}
-
 
 .menuLeftCounters{
   counter-increment: section;
@@ -55,4 +67,8 @@ input:focus {
 .menuLeftListHovers:hover{
   background-color: rgba(41, 182, 246, 0.5);
   border-left: 2px solid var(--primaryBlue);
+}
+
+.parentHoverBlack:hover > .childHoverBlack {
+  color: #000;
 }

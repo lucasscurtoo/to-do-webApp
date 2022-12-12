@@ -10,6 +10,7 @@ const taskSchema = Joi.object ({
 })
 
 const updateTask = async (req, res) => {
+    console.log(req.body)
     const {error} = taskSchema.validate(req.body)
     if (error) return res.status(400).json({error: error.details[0].message})
     
@@ -17,6 +18,7 @@ const updateTask = async (req, res) => {
     if (!list) return res.status(404).json({error: true, message: "List doesnt exists", status: 404})
 
     const taskExists = list.todo.some(elem => elem.description === req.body.description)
+    console.log(taskExists)
     if (!taskExists) return res.status(404).json({error: true, message: `Task ${req.body.description} doesnt exists`, status:404})
 
     const sameTask = list.todo.some(elem => elem.description === req.body.newDescription)

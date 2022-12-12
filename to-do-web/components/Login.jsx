@@ -5,19 +5,24 @@ import { useFormik } from "formik";
 import { loginValidation } from "../helpers/validation";
 import { authRequest } from "../api/auth";
 import { EyeSlashIcon, EyeIcon } from "@heroicons/react/24/outline";
-import { useRedirect } from "./RedirectContext";
 import CustomToast from "./CustomToast";
+import { useDispatch, useSelector } from "react-redux";
+import { setErrorState } from "../redux/todoSlice";
+import { setRedirectState } from "../redux/userSlice";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [logged, setLogged] = useState(null);
   const [showToast, setShowToast] = useState(false);
-  const { redirect } = useRedirect();
+  const redirect = useSelector((state) => state.userReducer.isRedirected)
+  const error = useSelector((state) => state.todoReducer.error)
+  const dispatch = useDispatch()
   const router = useRouter();
 
   useEffect(() => {
     if (redirect) {
-      setShowToast(true);
+      dispatch(setErrorState({state: true, message:"Log in before"}))
+      setShowToast(true)
     }
   }, []);
 
@@ -35,6 +40,9 @@ const Login = () => {
             setLogged(true);
             localStorage.setItem("token", response.data.token);
             localStorage.setItem("username", values.username)
+            setShowToast(false)
+            dispatch(setRedirectState(false))
+            dispatch(setErrorState(null))
             router.push("/ToDo");
           } else {
             setLogged(false);
@@ -45,12 +53,12 @@ const Login = () => {
   });
 
   return (
-    <div className="w-screen h-screen bg-background1 bg-cover bg-no-repeat">
+    <div className="w-screen h-screen background1 bg-cover bg-no-repeat">
       <CustomToast
         show={showToast}
         close={() => setShowToast(false)}
-        notifi={redirect && "Please log in before"}
-        state={!redirect}
+        notifi={error?.state && error?.message}
+        state={!error?.state}
       />
       <form
         className="black-overlay w-full h-full flex justify-center items-center"

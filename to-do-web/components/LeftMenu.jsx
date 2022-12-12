@@ -1,54 +1,24 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { ChevronLeftIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { checkIfExists, defaultList } from "../helpers/functions";
-import { toDoCreateList, toDoGetLists } from "../api/lists";
-import CustomToast from "./CustomToast";
 import DocumentIcon from "../assets/icons/document-icon.svg";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCreateList, selectAList, setErrorState } from "../redux/todoSlice";
 
-const LeftMenu = ({ close, selectedList }) => {
-  const [lists, setLists] = useState(defaultList);
-  const [showToast, setShowToast] = useState(false);
-  const [listCreated, setListCreated] = useState();
-  const [listExists, setListExists] = useState(false);
+const LeftMenu = ({ close }) => {
+  const lists = useSelector((state) => state.todoReducer.lists)
   const [selectedListStyle, setSelectedListStyle] = useState(
     defaultList[0].title
   );
   const newList = useRef(null);
-
-  useEffect(() => {
-    toDoGetLists().then((response) => {
-      if (response.status === 200) {
-        setLists(response.data);
-        setSelectedListStyle(response.data[0].title)
-      }
-    });
-  }, []);
+  const dispatch = useDispatch()
 
   const createNewList = (listName) => {
     const listExists = checkIfExists(lists, listName);
     if (listExists) {
-      setShowToast(true);
-      setListExists(true);
+      dispatch(setErrorState({state: true, message:"The list already exists"}))
     } else {
-      setLists((lists) => [
-        ...lists,
-        {
-          title: listName,
-          todo: [],
-          user: {
-            username: localStorage.getItem("username"),
-          },
-        },
-      ]);
-      toDoCreateList(listName).then((response) => {
-        if (response.status === 400) {
-          setListCreated(false);
-          setShowToast(true);
-        } else {
-          setListCreated(true);
-          setShowToast(false);
-        }
-      });
+      dispatch(fetchCreateList(listName))
     }
   };
 
@@ -61,8 +31,8 @@ const LeftMenu = ({ close, selectedList }) => {
   };
 
   const handleSelectedList = (list) => {
-    selectedList(list);
     setSelectedListStyle(list.title);
+    dispatch(selectAList(list))
   };
 
   const handleLogOut = () => {
@@ -70,27 +40,17 @@ const LeftMenu = ({ close, selectedList }) => {
   };
 
   return (
-    <div className="bg-white w-full h-full menuLeftShadow">
-      <CustomToast
-        show={showToast}
-        close={() => setShowToast(false)}
-        notifi={
-          (listCreated === false &&
-            "There was an error creating the list, try again") ||
-          (listExists && "List already exists, cant be created")
-        }
-        state={listCreated}
-      />
+    <div className="bg-white w-full h-full shadow-lg">
       <div className="py-6 px-4 h-full flex flex-col menuLeftCounters">
         <section
           onClick={() => close(true)}
-          className="w-full flex items-center cursor-pointer"
+          className="w-full flex items-center cursor-pointer mt-4 ml-2 parentHoverBlack"
         >
-          <ChevronLeftIcon className="w-8 text-mediumGray" />
-          <p className="text-mediumGray font-thin">Close</p>
+          <ChevronLeftIcon className="w-6 text-mediumGray childHoverBlack transition-all duration-300 hover:rotate-180" />
+          <p className="text-mediumGray font-thin childHoverBlack">Close</p>
         </section>
         <section className="w-full flex mt-24 text-mediumGray flex-col">
-          {lists.map((list) => (
+          {lists?.map((list) => (
             <div
               className={`flex w-full items-center menuLeftCounters ${
                 selectedListStyle === list.title
@@ -119,7 +79,7 @@ const LeftMenu = ({ close, selectedList }) => {
             />
           </section>
         </section>
-        <section className="w-full mt-auto">
+        <section className="w-full mt-auto mb-4 ml-3">
           <h2 onClick={handleLogOut}>Log out</h2>
         </section>
       </div>

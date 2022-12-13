@@ -4,9 +4,9 @@
 @tailwind components;
 @tailwind utilities;
 
-:root{
-  --primaryBlue: #29B6F6;
-  --intenseRed: #F30000;
+:root {
+  --primaryBlue: #29b6f6;
+  --intenseRed: #f30000;
 }
 
 html {
@@ -17,8 +17,8 @@ html {
 }
 
 ::-webkit-scrollbar {
-  width: 0;  
-  background: transparent; 
+  width: 0;
+  background: transparent;
   display: none;
 }
 
@@ -35,24 +35,24 @@ input:focus {
   font-family: "Poppins";
 }
 
-.background1{
-  background-image: url('../assets/images/background1.jpg');
+.background1 {
+  background-image: url("../assets/images/background1.jpg");
 }
 
 .black-overlay {
   background: rgba(0, 0, 0, 0.5);
 }
 
-.placeholders::placeholder{
+.placeholders::placeholder {
   font-weight: 100;
   font-size: 16px;
 }
 
-.placeholders:focus::placeholder{
-  color: #C4C4C4;
+.placeholders:focus::placeholder {
+  color: #c4c4c4;
 }
 
-.menuLeftCounters{
+.menuLeftCounters {
   counter-increment: section;
   counter-reset: section;
   margin: 0;
@@ -60,12 +60,12 @@ input:focus {
   list-style: none;
 }
 
-.menuLeftListHovers::before{
-  content: counters(section, '');
-  opacity: 0
+.menuLeftListHovers::before {
+  content: counters(section, "");
+  opacity: 0;
 }
 
-.menuLeftListHovers:hover{
+.menuLeftListHovers:hover {
   background-color: rgba(41, 182, 246, 0.5);
   border-left: 2px solid var(--primaryBlue);
 }

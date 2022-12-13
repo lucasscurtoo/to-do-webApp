@@ -1,59 +1,80 @@
-import { useState, useRef } from "react";
-import { ChevronLeftIcon, PlusIcon } from "@heroicons/react/24/outline";
-import { checkIfExists, defaultList } from "../helpers/functions";
-import DocumentIcon from "../assets/icons/document-icon.svg";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchCreateList, fetchDeleteList, selectAList, setErrorState } from "../redux/todoSlice";
-import DeleteMenu from "./DeleteMenu";
+import { useState, useRef, useEffect } from "react"
+import { ChevronLeftIcon, PlusIcon } from "@heroicons/react/24/outline"
+import { checkIfExists } from "../helpers/functions"
+import DocumentIcon from "../assets/icons/document-icon.svg"
+import { useDispatch, useSelector } from "react-redux"
+import {
+  fetchCreateList,
+  fetchDeleteList,
+  selectAList,
+  setErrorState,
+} from "../redux/todoSlice"
+import DeleteMenu from "./DeleteMenu"
 
 const LeftMenu = ({ close }) => {
   const lists = useSelector((state) => state.todoReducer.lists)
-  const selectedList = useSelector((state) =>  state.todoReducer.selectedList)
+  const selectedList = useSelector((state) => state.todoReducer.selectedList)
   const darkMode = useSelector((state) => state.userReducer.darkmode)
-  const newList = useRef(null);
+  const [isMobileState, setIsMobileState] = useState(null)
+  const newList = useRef(null)
   const dispatch = useDispatch()
 
+  useEffect(() => {
+    const width = window.innerWidth
+    const isMobile = width < 768 ? true : false
+    if (isMobile) {
+      setIsMobileState(true)
+    }
+  }, [])
+
   const createNewList = (listName) => {
-    const listExists = checkIfExists(lists, listName);
+    const listExists = checkIfExists(lists, listName)
     if (listExists) {
-      dispatch(setErrorState({state: true, message:"The list already exists"}))
+      dispatch(
+        setErrorState({ state: true, message: "The list already exists" })
+      )
     } else {
       dispatch(fetchCreateList(listName))
     }
-  };
+  }
 
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
-      createNewList(newList.current.value);
-      newList.current.value = "";
-      newList.current.blur();
+      createNewList(newList.current.value)
+      newList.current.value = ""
+      newList.current.blur()
     }
-  };
+  }
 
-  const handleDeleteList = (listTitle) =>{
+  const handleDeleteList = (listTitle) => {
     dispatch(fetchDeleteList(listTitle))
     dispatch(selectAList(lists[0]))
   }
 
   const handleSelectedList = (list) => {
     dispatch(selectAList(list))
-  };
+    if (isMobileState) {
+      close(true)
+    }
+  }
 
   const handleLogOut = () => {
-    console.log("Not implemented yet");
-  };
+    console.log("Not implemented yet")
+  }
 
   return (
-    <div className="bg-white dark:bg-primaryDarkColor w-full h-full shadow-lg">
+    <div className="bg-white dark:bg-primaryDarkColor w-2/4 md:w-full h-screen md:h-full shadow-lg absolute z-10 md:static">
       <div className="py-6 px-4 h-full flex flex-col menuLeftCounters">
         <section
           onClick={() => close(true)}
-          className={`w-full flex items-center cursor-pointer mt-4 ml-2 ${darkMode ? "parentHoverWhite":"parentHoverBlack"}`}
+          className={`w-full flex items-center cursor-pointer mt-4 ml-2 ${
+            darkMode ? "parentHoverWhite" : "parentHoverBlack"
+          }`}
         >
           <ChevronLeftIcon className="w-6 text-mediumGray childHover transition-all duration-300 hover:rotate-180" />
           <p className="text-mediumGray font-thin childHover">Close</p>
         </section>
-        <section className="w-full flex mt-24 text-mediumGray flex-col">
+        <section className="w-full flex mt-12 md:mt-24 text-mediumGray flex-col">
           {lists?.map((list) => (
             <div
               className={`flex w-full items-center menuLeftCounters ${
@@ -63,16 +84,21 @@ const LeftMenu = ({ close }) => {
               }`}
               key={list.title}
               onClick={() => handleSelectedList(list)}
-            > 
+            >
               <div className="flex w-full items-center menuLeftListHovers py-2 relative">
-                <DeleteMenu onClick={() => handleDeleteList(list.title)}/>
+                <DeleteMenu onClick={() => handleDeleteList(list.title)} />
                 <DocumentIcon
-                  stroke={selectedList.title === list.title ?  darkMode ? "white" : "black" : "gray"}
-                  className="mr-2 min-w-max"
-                  />
+                  stroke={
+                    selectedList.title === list.title
+                      ? darkMode
+                        ? "white"
+                        : "black"
+                      : "gray"
+                  }
+                  className="mr-2 md:min-w-max"
+                />
                 <h2 className="truncate">{list.title}</h2>
               </div>
-
             </div>
           ))}
           <section className="flex mt-8">
@@ -85,12 +111,13 @@ const LeftMenu = ({ close }) => {
             />
           </section>
         </section>
-        <section className="w-full mt-auto mb-4 ml-3">
+        <section className="w-full mt-auto mb-4 pl-3">
           <h2 onClick={handleLogOut}>Log out</h2>
+          <div className="ml-auto mr-3 relative"></div>
         </section>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default LeftMenu;
+export default LeftMenu

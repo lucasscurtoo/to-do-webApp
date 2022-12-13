@@ -38,5 +38,3 @@ app.use("/tasks", validateToken, tasks);
 app.use("/users", validateToken, user);
 
 app.listen(port, () => console.log("server running on port", port));
-
-app.listen(port, () => console.log("server running on port", port));

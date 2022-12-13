@@ -5,33 +5,41 @@ import { PlusIcon } from "@heroicons/react/24/outline"
 import CustomToast from "./CustomToast"
 
 const NewTask = () => {
-    const newTask = useRef(null)
-    const tasks = useSelector((state) => state.todoReducer.tasks)
-    const selectedList = useSelector((state) => state.todoReducer.selectedList)
-    const dispatch = useDispatch()
+  const newTask = useRef(null)
+  const tasks = useSelector((state) => state.todoReducer.tasks)
+  const selectedList = useSelector((state) => state.todoReducer.selectedList)
+  const dispatch = useDispatch()
 
-    const handleNewTask = () => {
-        const newTaskValue = newTask.current.value
-        newTask.current.value = ""
-        newTask.current.blur() 
-        if (newTaskValue != "") {
-          if (!tasks.some(elem => elem.description === newTaskValue)) {
-              dispatch(fetchCreateTask({title: selectedList.title, completed: false, description: newTaskValue}))
-          }else{
-            dispatch(setErrorState({state: true, message:"This task already exists"}))
-          }
-        }
+  const handleNewTask = () => {
+    const newTaskValue = newTask.current.value
+    newTask.current.value = ""
+    newTask.current.blur()
+    if (newTaskValue != "") {
+      if (!tasks.some((elem) => elem.description === newTaskValue)) {
+        dispatch(
+          fetchCreateTask({
+            title: selectedList.title,
+            completed: false,
+            description: newTaskValue,
+          })
+        )
+      } else {
+        dispatch(
+          setErrorState({ state: true, message: "This task already exists" })
+        )
       }
+    }
+  }
 
-      const newTaskHandleKeyDown = (event) => {
-        if (event.key === "Enter") {
-          handleNewTask(newTask.current.value)
-        }
-      }
+  const newTaskHandleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      handleNewTask(newTask.current.value)
+    }
+  }
 
   return (
-    <div className="w-full h-20 bg-white dark:bg-thirdDarkColor mx-auto shadow-md mb-4">
-      <div className="w-full h-20 flex items-center">
+    <div className="w-full h-16 md:h-20 bg-white dark:bg-thirdDarkColor mx-auto shadow-md mb-4">
+      <div className="w-full h-16 md:h-20 flex items-center">
         <PlusIcon className="w-8 ml-4 text-blueColor" />
         <input
           className="ml-2 w-full pr-2 bg-transparent placeholder:text-blueColor font-thin placeholders"
@@ -50,4 +58,4 @@ const NewTask = () => {
   )
 }
 
-export default NewTask;
+export default NewTask

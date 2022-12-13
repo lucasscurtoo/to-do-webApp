@@ -1,6 +1,7 @@
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL
 
 export const tasksCreateTask = async (title, completed, description) => {
+  const username = localStorage.getItem("username")
   return await fetch(`${BASE_URL}/tasks/createTask`, {
     method: "POST",
     headers: {
@@ -23,6 +24,7 @@ export const tasksUpdateTask = async (
   description,
   newDescription
 ) => {
+  const username = localStorage.getItem("username")
   return await fetch(`${BASE_URL}/tasks/updateTask`, {
     method: "PUT",
     headers: {
@@ -41,6 +43,7 @@ export const tasksUpdateTask = async (
 }
 
 export const tasksDeleteTask = async (title, completed, description) => {
+  const username = localStorage.getItem("username")
   return await fetch(`${BASE_URL}/tasks/deleteTask`, {
     method: "DELETE",
     headers: {
@@ -62,6 +65,7 @@ export const tasksCompleteOrDecomplete = async (
   completed,
   description
 ) => {
+  const username = localStorage.getItem("username")
   return await fetch(`${BASE_URL}/tasks/completeOrDecompleteTask`, {
     method: "PUT",
     headers: {

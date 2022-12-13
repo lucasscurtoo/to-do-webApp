@@ -11,22 +11,27 @@ import {
 import CustomToast from "../components/CustomToast"
 import { useDispatch, useSelector } from "react-redux"
 import { fetchGetLists } from "../redux/todoSlice"
-import { setRedirectState } from "../redux/userSlice"
+import {
+  fetchGetUserDarkMode,
+  setRedirectState,
+  fetchUpdateUserDarkMode,
+} from "../redux/userSlice"
 import NewTask from "../components/NewTask"
+import { useTheme } from "next-themes"
 
 const ToDo = () => {
   const [closeState, setCloseState] = useState(false)
   const selectedList = useSelector((state) => state.todoReducer.selectedList)
   const tasks = useSelector((state) => state.todoReducer.tasks)
-  const completedTasks = useSelector((state) => state.todoReducer.completedTasks)
+  const completedTasks = useSelector(
+    (state) => state.todoReducer.completedTasks
+  )
+  const { setTheme } = useTheme()
   const [showToast, setShowToast] = useState(false)
-  // const [list, setList] = useState(defaultList[0])
   const [openCompleted, setOpenCompleted] = useState(false)
   const error = useSelector((state) => state.todoReducer.error)
   const router = useRouter()
-  // const { setRedirect } = useRedirect()
-  // const { darkMode, setDarkMode } = useDarkMode()
-  const darkMode = false
+  const darkMode = useSelector((state) => state.userReducer.darkmode)
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -35,34 +40,40 @@ const ToDo = () => {
       dispatch(setRedirectState(true))
     }
     dispatch(fetchGetLists())
+    dispatch(fetchGetUserDarkMode())
   }, [])
 
   useEffect(() => {
     setOpenCompleted(false)
   }, [selectedList])
-  
+
   useEffect(() => {
-    error !== null && 
-      setShowToast(true)
+    error !== null && setShowToast(true)
   }, [error])
-  
+
+  useEffect(() => {
+    setTheme(darkMode ? "dark" : "light")
+  }, [darkMode])
+
+  const handleDarkMode = () => {
+    dispatch(fetchUpdateUserDarkMode(!darkMode))
+  }
 
   return (
     <div className="w-screen h-screen background1 bg-cover bg-no-repeat">
-       {error !== null &&
+      {error !== null && (
         <CustomToast
-            show={showToast}
-            close={() => setShowToast(false)}
-            notifi={error.state && error.message}
-            state={!error.state}
-            />}
+          show={showToast}
+          close={() => setShowToast(false)}
+          notifi={error.state && error.message}
+          state={!error.state}
+        />
+      )}
       <div className="black-overlay w-full h-full flex">
-        <div className="bg-secondGrayColor w-4/5 h-90% m-auto flex">
+        <div className="bg-secondGrayColor dark:bg-secondDarkColor w-4/5 h-90% m-auto flex">
           {!closeState && (
             <div className="w-1/6 h-full">
-              <LeftMenu
-                close={setCloseState}
-              />
+              <LeftMenu close={setCloseState} />
             </div>
           )}
           <div
@@ -74,7 +85,7 @@ const ToDo = () => {
               {closeState ? (
                 <div className="flex items-center">
                   <ChevronRightIcon
-                    className="w-6 text-mediumGray hover:text-black transition-all duration-300 hover:rotate-180"
+                    className="w-6 text-mediumGray hover:text-black dark:hover:text-white transition-all duration-300 hover:rotate-180"
                     onClick={() => setCloseState(!closeState)}
                   />
                   <h1 className="text-mediumGray">{selectedList?.title}</h1>
@@ -82,25 +93,28 @@ const ToDo = () => {
               ) : (
                 <h1 className="text-mediumGray">{selectedList?.title}</h1>
               )}
-              {darkMode === true ? (
+              {darkMode ? (
                 <SunIcon
                   className="ml-auto w-8 text-mediumGray hover:text-white"
-                  onClick={() => setDarkMode(!darkMode)}
+                  onClick={handleDarkMode}
                 />
               ) : (
                 <MoonIcon
                   className="ml-auto w-8 text-mediumGray hover:text-black"
-                  onClick={() => setDarkMode(!darkMode)}
+                  onClick={handleDarkMode}
                 />
               )}
             </section>
-            <NewTask/>
+            <NewTask />
             {tasks?.map(
               (todo) =>
                 todo.completed === false && (
                   <Task
-                    itsNew={false}
-                    todo={{title: selectedList.title, completed:todo.completed, description: todo.description}}
+                    todo={{
+                      title: selectedList.title,
+                      completed: todo.completed,
+                      description: todo.description,
+                    }}
                     key={todo.description}
                   />
                 )
@@ -123,8 +137,11 @@ const ToDo = () => {
                 completedTasks.length > 0 &&
                 completedTasks.map((todo) => (
                   <Task
-                    itsNew={false}
-                    todo={todo}
+                    todo={{
+                      title: selectedList.title,
+                      completed: todo.completed,
+                      description: todo.description,
+                    }}
                     key={todo.description}
                   />
                 ))}

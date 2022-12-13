@@ -6,6 +6,7 @@
 
 :root{
   --primaryBlue: #29B6F6;
+  --intenseRed: #F30000;
 }
 
 html {
@@ -69,6 +70,14 @@ input:focus {
   border-left: 2px solid var(--primaryBlue);
 }
 
-.parentHoverBlack:hover > .childHoverBlack {
+.parentHoverBlack:hover > .childHover {
   color: #000;
+}
+
+.parentHoverWhite:hover > .childHover {
+  color: #fff;
+}
+
+.parentHoverRed:hover > .childHover {
+  color: var(--intenseRed);
 }

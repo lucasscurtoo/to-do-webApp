@@ -1,30 +1,30 @@
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import Link from "next/link";
-import { useFormik } from "formik";
-import { loginValidation } from "../helpers/validation";
-import { authRequest } from "../api/auth";
-import { EyeSlashIcon, EyeIcon } from "@heroicons/react/24/outline";
-import CustomToast from "./CustomToast";
-import { useDispatch, useSelector } from "react-redux";
-import { setErrorState } from "../redux/todoSlice";
-import { setRedirectState } from "../redux/userSlice";
+import { useEffect, useState } from "react"
+import { useRouter } from "next/router"
+import Link from "next/link"
+import { useFormik } from "formik"
+import { loginValidation } from "../helpers/validation"
+import { authRequest } from "../api/auth"
+import { EyeSlashIcon, EyeIcon } from "@heroicons/react/24/outline"
+import CustomToast from "./CustomToast"
+import { useDispatch, useSelector } from "react-redux"
+import { setErrorState } from "../redux/todoSlice"
+import { setRedirectState, setUsername } from "../redux/userSlice"
 
 const Login = () => {
-  const [showPassword, setShowPassword] = useState(false);
-  const [logged, setLogged] = useState(null);
-  const [showToast, setShowToast] = useState(false);
+  const [showPassword, setShowPassword] = useState(false)
+  const [logged, setLogged] = useState(null)
+  const [showToast, setShowToast] = useState(false)
   const redirect = useSelector((state) => state.userReducer.isRedirected)
   const error = useSelector((state) => state.todoReducer.error)
   const dispatch = useDispatch()
-  const router = useRouter();
+  const router = useRouter()
 
   useEffect(() => {
     if (redirect) {
-      dispatch(setErrorState({state: true, message:"Log in before"}))
+      dispatch(setErrorState({ state: true, message: "Log in before" }))
       setShowToast(true)
     }
-  }, []);
+  }, [])
 
   const formik = useFormik({
     initialValues: {
@@ -37,20 +37,21 @@ const Login = () => {
       authRequest(values.username, values.password, "/login").then(
         (response) => {
           if (response.status === 200) {
-            setLogged(true);
-            localStorage.setItem("token", response.data.token);
+            setLogged(true)
+            localStorage.setItem("token", response.data.token)
             localStorage.setItem("username", values.username)
             setShowToast(false)
             dispatch(setRedirectState(false))
             dispatch(setErrorState(null))
-            router.push("/ToDo");
+            dispatch(setUsername(localStorage.getItem("username")))
+            router.push("/to-do")
           } else {
-            setLogged(false);
+            setLogged(false)
           }
         }
-      );
+      )
     },
-  });
+  })
 
   return (
     <div className="w-screen h-screen background1 bg-cover bg-no-repeat">
@@ -139,7 +140,7 @@ const Login = () => {
         </div>
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default Login;
+export default Login

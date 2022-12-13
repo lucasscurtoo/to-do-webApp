@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { listsCreateList, listsGetLists } from "../api/lists";
-import { tasksCreateTask, tasksUpdateTask } from "../api/tasks";
+import { listsCreateList, listsDeleteList, listsGetLists } from "../api/lists";
+import { tasksCompleteOrDecomplete, tasksCreateTask, tasksDeleteTask, tasksUpdateTask } from "../api/tasks";
 
 export const fetchGetLists = createAsyncThunk('lists/getLists', async() => {
   const response = await listsGetLists()
@@ -12,6 +12,13 @@ export const fetchCreateList = createAsyncThunk('lists/createList', async(newLis
     return response
 })
 
+export const fetchDeleteList = createAsyncThunk('lists/deleteList', async(listTitle) => {
+  console.log(listTitle)
+  const response = await listsDeleteList(listTitle)
+  return response
+})
+
+
 export const fetchCreateTask = createAsyncThunk('/tasks/createTask', async(values) => {
   const response = await tasksCreateTask(values.title, values.completed, values.description)
   return response
@@ -21,6 +28,17 @@ export const fetchUpdateTask = createAsyncThunk('/tasks/updateTask', async(value
   const response = await tasksUpdateTask(values.title, values.completed, values.description, values.newDescription)
   return response
 })
+
+export const fetchDeleteTask = createAsyncThunk('/tasks/deleteTask', async(values) => {
+  const response = await tasksDeleteTask(values.title, values.completed, values.description)
+  return response
+})
+
+export const fetchCompleteOrDecompleteTask = createAsyncThunk('/tasks/completeOrDecompleteTask', async(values) => {
+  const response = await tasksCompleteOrDecomplete(values.title, values.completed, values.description)
+  return response
+})
+
 
 const defaultList = [{
   title: 'My list',
@@ -86,8 +104,24 @@ const todoSlice = createSlice({
       state.loading = true
     })
     .addCase(fetchGetLists.fulfilled, (state, action) => {
-      state.loading = false
-      state.lists = action.payload
+      if (action.payload === undefined) {
+        state.lists = defaultList
+      }else{
+        state.loading = false
+        state.lists = action.payload
+        const tasks = []
+        const completed = []
+        action.payload[0].todo.map((task) => {
+          if (task.completed) {
+            completed.push(task)
+          }else{
+            tasks.push(task)
+          }
+        })
+        state.tasks = tasks
+        state.completedTasks = completed
+        state.selectedList = action.payload[0]
+      }
     })
     .addCase(fetchCreateList.fulfilled, (state, action) => {
       console.log(action)
@@ -100,11 +134,18 @@ const todoSlice = createSlice({
       }else{
         state.error = {state: true, message:action.payload.message}
       }
-   
     })
+    .addCase(fetchDeleteList.fulfilled, (state, action) => {
+      const lists = JSON.parse(JSON.stringify(state.lists));
+      const title = action.meta.arg
+      state.lists = lists.filter((item) => 
+              item.title !== title)      
+    })
+
     .addCase(fetchCreateTask.fulfilled, (state, action) => {
       state.tasks.push(action.meta.arg)
     })
+
     .addCase(fetchUpdateTask.fulfilled, (state, action) => {
       const tasks = JSON.parse(JSON.stringify(state.tasks));
       const {completed, description, newDescription} = action.meta.arg
@@ -114,6 +155,14 @@ const todoSlice = createSlice({
         state.tasks = tasks
       }
     })
+
+    .addCase(fetchDeleteTask.fulfilled, (state, action) => {
+      const tasks = JSON.parse(JSON.stringify(state.tasks));
+      const {completed, description} = action.meta.arg
+      state.tasks = tasks.filter((item) => 
+              item.description !== description)    
+    })
+
   }
 
   

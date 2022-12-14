@@ -157,6 +157,7 @@ const todoSlice = createSlice({
       .addCase(fetchGetLists.fulfilled, (state, action) => {
         if (action.payload === undefined) {
           state.lists = defaultList
+          state.noLists = true
         } else {
           state.loading = false
           state.lists = action.payload

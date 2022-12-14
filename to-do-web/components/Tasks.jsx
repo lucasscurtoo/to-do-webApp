@@ -84,7 +84,7 @@ const Task = ({ todo }) => {
           onBlur={handleTaskChange}
         />
         <TrashIcon
-          className="w-6 mr-8 text-errorColor hover:text-intenseErrorColor dark:text-softErrorColor dark:hover:text-errorColor"
+          className="w-8 md:w-6 mr-8 text-errorColor hover:text-intenseErrorColor dark:text-softErrorColor dark:hover:text-errorColor"
           onClick={handleDeleteTask}
         />
       </div>

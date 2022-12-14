@@ -1,14 +1,3 @@
-export const defaultList = [
-  {
-    title: "My list",
-    todo: [],
-    user: {
-      username:
-        typeof window !== "undefined" ? localStorage.getItem("username") : null,
-    },
-  },
-]
-
 export const checkIfExists = (data, item) => {
   if (data === undefined) {
     return false
@@ -21,3 +10,9 @@ export const checkIfExists = (data, item) => {
 }
 
 export const getUnique = (arr) => [...new Set(arr)]
+
+export const checkIfChanged = (prevValue, newValue) => {
+  if (prevValue !== newValue) {
+    return true
+  }
+}

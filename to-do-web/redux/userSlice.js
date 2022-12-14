@@ -33,16 +33,18 @@ export const fetchUpdateUserDarkMode = createAsyncThunk(
 const userSlice = createSlice({
   name: "user",
   initialState: {
-    isRedirected: false,
+    isRedirected: null,
     isLoggedIn: null,
     username: null,
     userToken: null,
     error: null,
     darkmode: false,
+    loading: false,
   },
   reducers: {
     setRedirected: (state, action) => {
-      state.isLoggedIn = action.payload
+      state.isRedirected = action.payload
+      state.error = { state: true, message: "Log in before" }
     },
     setErrorState: (state, action) => {
       state.error = action.payload
@@ -50,8 +52,12 @@ const userSlice = createSlice({
     clearUserData: (state) => {
       state.username = null
       state.userToken = null
-      state.isLoggedIn = null
-      state.isRedirected = false
+      localStorage.removeItem("token")
+      localStorage.removeItem("username")
+      localStorage.setItem("theme", "light")
+    },
+    logOut: (state, action) => {
+      state.isLoggedIn = false
     },
   },
   extraReducers: (builder) => {
@@ -66,6 +72,8 @@ const userSlice = createSlice({
           state.username = username
           state.userToken = token
           state.isLoggedIn = true
+          state.isRedirected = false
+          state.error = null
         } else {
           state.isLoggedIn = false
           state.error = { state: true, message: action.payload.message }
@@ -84,5 +92,6 @@ const userSlice = createSlice({
   },
 })
 
-export const { setRedirected, setErrorState, clearUserData } = userSlice.actions
+export const { setRedirected, setErrorState, clearUserData, logOut } =
+  userSlice.actions
 export default userSlice.reducer

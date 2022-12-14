@@ -13,9 +13,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { fetchGetLists } from "../redux/todoSlice"
 import {
   fetchGetUserDarkMode,
-  setRedirectState,
   fetchUpdateUserDarkMode,
-  setLoggedState,
   setRedirected,
   clearUserData,
 } from "../redux/userSlice"
@@ -23,8 +21,6 @@ import NewTask from "../components/NewTask"
 import { useTheme } from "next-themes"
 
 const ToDo = () => {
-  const isLoggedIn = useSelector((state) => state.userReducer.isLoggedIn)
-  const isRedirected = useSelector((state) => state.userReducer.isRedirected)
   const [closeState, setCloseState] = useState(false)
   const selectedList = useSelector((state) => state.todoReducer.selectedList)
   const tasks = useSelector((state) => state.todoReducer.tasks)
@@ -38,6 +34,7 @@ const ToDo = () => {
   const router = useRouter()
   const darkMode = useSelector((state) => state.userReducer.darkmode)
   const [isMobileState, setIsMobileState] = useState(null)
+
   const dispatch = useDispatch()
 
   useEffect(() => {

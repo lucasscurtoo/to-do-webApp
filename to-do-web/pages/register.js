@@ -71,7 +71,7 @@ const Register = () => {
             <section className="w-3/4 md:w-2/4 flex flex-col">
               <p>Username</p>
               <input
-                className="py-2.5 pl-3 rounded-sm placeholder:text-grayColor text-black text-sm font-medium"
+                className="py-2.5 pl-3 rounded-sm dark:bg-white placeholder:text-grayColor text-black text-sm font-medium"
                 placeholder="Username"
                 name="username"
                 type="text"
@@ -90,7 +90,7 @@ const Register = () => {
               <p>Password</p>
               <div className="w-full py-2 pl-3 flex rounded-sm bg-white">
                 <input
-                  className="w-4/5 placeholder:text-grayColor text-black text-sm font-medium"
+                  className="w-4/5 placeholder:text-grayColor dark:bg-white text-black text-sm font-medium"
                   placeholder="Password"
                   name="password"
                   type={showPassword ? "text" : "password"}
@@ -121,7 +121,7 @@ const Register = () => {
               <p>Repeat password</p>
               <div className="w-full py-2 pl-3 flex rounded-sm bg-white">
                 <input
-                  className="w-4/5 placeholder:text-grayColor text-black text-sm font-medium"
+                  className="w-4/5 placeholder:text-grayColor dark:bg-white text-black text-sm font-medium"
                   placeholder="Repeat password"
                   name="confirm_password"
                   type={showRepeatedPassword ? "text" : "password"}
@@ -159,7 +159,7 @@ const Register = () => {
               Register
             </button>
             <section className="flex">
-              <p className="text-darkGray text-sm mr-6">
+              <p className="text-grayColor text-sm mr-6">
                 Already have account?
               </p>
               <Link className="text-sm " href="/">

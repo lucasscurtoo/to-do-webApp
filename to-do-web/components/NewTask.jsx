@@ -1,8 +1,7 @@
-import { useRef, useState } from "react"
+import { useRef } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { fetchCreateTask, setErrorState } from "../redux/todoSlice"
 import { PlusIcon } from "@heroicons/react/24/outline"
-import CustomToast from "./CustomToast"
 
 const NewTask = () => {
   const newTask = useRef(null)

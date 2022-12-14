@@ -10,6 +10,8 @@ import {
   setErrorState,
 } from "../redux/todoSlice"
 import DeleteMenu from "./DeleteMenu"
+import { clearUserData, logOut } from "../redux/userSlice"
+import { useRouter } from "next/router"
 
 const LeftMenu = ({ close }) => {
   const lists = useSelector((state) => state.todoReducer.lists)
@@ -18,6 +20,7 @@ const LeftMenu = ({ close }) => {
   const [isMobileState, setIsMobileState] = useState(null)
   const newList = useRef(null)
   const dispatch = useDispatch()
+  const router = useRouter()
 
   useEffect(() => {
     const width = window.innerWidth
@@ -58,8 +61,10 @@ const LeftMenu = ({ close }) => {
     }
   }
 
-  const handleLogOut = () => {
-    console.log("Not implemented yet")
+  const handleLogOut = async () => {
+    dispatch(logOut())
+    dispatch(clearUserData())
+    router.push("/")
   }
 
   return (

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { useRouter } from "next/router"
 import Link from "next/link"
 import { useFormik } from "formik"
@@ -7,32 +7,34 @@ import { EyeSlashIcon, EyeIcon } from "@heroicons/react/24/outline"
 import CustomToast from "./CustomToast"
 import { useDispatch, useSelector } from "react-redux"
 import { setErrorState } from "../redux/todoSlice"
-import { fetchAuthRequest } from "../redux/userSlice"
+import { fetchAuthRequest, setRedirected } from "../redux/userSlice"
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false)
   const isLoggedIn = useSelector((state) => state.userReducer.isLoggedIn)
   const [showToast, setShowToast] = useState(false)
-  const redirect = useSelector((state) => state.userReducer.isRedirected)
+  const isRedirected = useSelector((state) => state.userReducer.isRedirected)
   const error = useSelector((state) => state.userReducer.error)
   const dispatch = useDispatch()
   const router = useRouter()
+  const errorChange = useMemo(() => setShowToast(true), [error])
 
   useEffect(() => {
-    if (redirect) {
+    if (isRedirected) {
       dispatch(setErrorState({ state: true, message: "Log in before" }))
       setShowToast(true)
+      setRedirected(false)
     }
   }, [])
 
   useEffect(() => {
-    if (isLoggedIn) {
+    if (isLoggedIn && isRedirected === false) {
       router.push("/to-do")
     }
   }, [isLoggedIn])
 
   useEffect(() => {
-    error !== null && setShowToast(true)
+    error !== null && errorChange && setShowToast(true)
   }, [error])
 
   const formik = useFormik({
@@ -78,7 +80,7 @@ const Login = () => {
             <section className="w-3/4 md:w-2/4 flex flex-col">
               <p>Username</p>
               <input
-                className="py-2.5 pl-3 rounded-sm placeholder:text-grayColor text-black text-sm font-medium"
+                className="py-2.5 pl-3 rounded-sm dark:bg-white placeholder:text-grayColor text-black text-sm font-medium"
                 placeholder="Username"
                 name="username"
                 type="text"
@@ -97,7 +99,7 @@ const Login = () => {
               <p>Password</p>
               <div className="w-full py-2 pl-3 flex rounded-sm bg-white">
                 <input
-                  className="w-4/5 placeholder:text-grayColor text-black text-sm font-medium"
+                  className="w-4/5 dark:bg-white placeholder:text-grayColor text-black text-sm font-medium"
                   placeholder="Password"
                   name="password"
                   type={showPassword ? "text" : "password"}

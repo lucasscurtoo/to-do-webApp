@@ -15,11 +15,16 @@ import {
   fetchGetUserDarkMode,
   setRedirectState,
   fetchUpdateUserDarkMode,
+  setLoggedState,
+  setRedirected,
+  clearUserData,
 } from "../redux/userSlice"
 import NewTask from "../components/NewTask"
 import { useTheme } from "next-themes"
 
 const ToDo = () => {
+  const isLoggedIn = useSelector((state) => state.userReducer.isLoggedIn)
+  const isRedirected = useSelector((state) => state.userReducer.isRedirected)
   const [closeState, setCloseState] = useState(false)
   const selectedList = useSelector((state) => state.todoReducer.selectedList)
   const tasks = useSelector((state) => state.todoReducer.tasks)
@@ -38,10 +43,12 @@ const ToDo = () => {
   useEffect(() => {
     if (!localStorage.getItem("token")) {
       router.push("/")
-      dispatch(setRedirectState(true))
+      dispatch(setRedirected(true))
+      dispatch(clearUserData())
+    } else {
+      dispatch(fetchGetLists())
+      dispatch(fetchGetUserDarkMode())
     }
-    dispatch(fetchGetLists())
-    dispatch(fetchGetUserDarkMode())
   }, [])
 
   useEffect(() => {

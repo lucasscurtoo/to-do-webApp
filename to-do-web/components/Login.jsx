@@ -3,19 +3,18 @@ import { useRouter } from "next/router"
 import Link from "next/link"
 import { useFormik } from "formik"
 import { loginValidation } from "../helpers/validation"
-import { authRequest } from "../api/auth"
 import { EyeSlashIcon, EyeIcon } from "@heroicons/react/24/outline"
 import CustomToast from "./CustomToast"
 import { useDispatch, useSelector } from "react-redux"
 import { setErrorState } from "../redux/todoSlice"
-import { setRedirectState, setUsername } from "../redux/userSlice"
+import { fetchAuthRequest } from "../redux/userSlice"
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false)
-  const [logged, setLogged] = useState(null)
+  const isLoggedIn = useSelector((state) => state.userReducer.isLoggedIn)
   const [showToast, setShowToast] = useState(false)
   const redirect = useSelector((state) => state.userReducer.isRedirected)
-  const error = useSelector((state) => state.todoReducer.error)
+  const error = useSelector((state) => state.userReducer.error)
   const dispatch = useDispatch()
   const router = useRouter()
 
@@ -26,6 +25,16 @@ const Login = () => {
     }
   }, [])
 
+  useEffect(() => {
+    if (isLoggedIn) {
+      router.push("/to-do")
+    }
+  }, [isLoggedIn])
+
+  useEffect(() => {
+    error !== null && setShowToast(true)
+  }, [error])
+
   const formik = useFormik({
     initialValues: {
       username: "",
@@ -34,33 +43,28 @@ const Login = () => {
     validationSchema: loginValidation(),
 
     onSubmit: (values) => {
-      authRequest(values.username, values.password, "/login").then(
-        (response) => {
-          if (response.status === 200) {
-            setLogged(true)
-            localStorage.setItem("token", response.data.token)
-            localStorage.setItem("username", values.username)
-            setShowToast(false)
-            dispatch(setRedirectState(false))
-            dispatch(setErrorState(null))
-            dispatch(setUsername(localStorage.getItem("username")))
-            router.push("/to-do")
-          } else {
-            setLogged(false)
-          }
-        }
+      setShowToast(false)
+      const { username, password } = values
+      dispatch(
+        fetchAuthRequest({
+          username: username,
+          password: password,
+          route: "/login",
+        })
       )
     },
   })
 
   return (
     <div className="w-screen h-screen background1 bg-cover bg-no-repeat">
-      <CustomToast
-        show={showToast}
-        close={() => setShowToast(false)}
-        notifi={error?.state && error?.message}
-        state={!error?.state}
-      />
+      {error !== null && (
+        <CustomToast
+          show={showToast}
+          close={() => setShowToast(false)}
+          notifi={error.state && error.message}
+          state={!error.state}
+        />
+      )}
       <form
         className="black-overlay w-full h-full flex justify-center items-center"
         onSubmit={formik.handleSubmit}
@@ -112,13 +116,15 @@ const Login = () => {
                   />
                 )}
               </div>
-              {formik.touched.password && formik.errors.password && (
-                <div className="relative">
-                  <p className="text-red-500 absolute">
-                    {formik.errors.password}
-                  </p>
-                </div>
-              )}
+              {formik.touched.password &&
+                formik.errors.password &&
+                (
+                  <div className="relative">
+                    <p className="text-red-500 absolute">
+                      {formik.errors.password}
+                    </p>
+                  </div>
+                ) === false}
             </section>
           </div>
           <div className="w-full flex flex-col items-center mt-36">
@@ -132,11 +138,6 @@ const Login = () => {
               </Link>
             </section>
           </div>
-          {logged === false && (
-            <div className="mx-auto mt-8">
-              <p className="text-red-500">Inocrrect Credentials</p>
-            </div>
-          )}
         </div>
       </form>
     </div>

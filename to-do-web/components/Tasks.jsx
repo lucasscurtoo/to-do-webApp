@@ -21,7 +21,6 @@ const Task = ({ todo }) => {
 
   const handleTaskChange = () => {
     if (todo.description != taskDescription) {
-      console.log("description", todo.description, "newDesc", taskDescription)
       dispatch(
         fetchUpdateTask({
           title: todo.title,

@@ -1,5 +1,18 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
+import { authRequest } from "../api/auth"
 import { usersGetUserDarkMode, usersUpdateUserDarkMode } from "../api/users"
+
+export const fetchAuthRequest = createAsyncThunk(
+  "/auth/authRequest",
+  async (values) => {
+    const response = await authRequest(
+      values.username,
+      values.password,
+      values.route
+    )
+    return response
+  }
+)
 
 export const fetchGetUserDarkMode = createAsyncThunk(
   "users/getUserDarkMode",
@@ -21,20 +34,43 @@ const userSlice = createSlice({
   name: "user",
   initialState: {
     isRedirected: false,
+    isLoggedIn: null,
     username: null,
-    //cambiar esto por un is logged y un verificar si esta logeado lo dejamos, sino no lo dejamos pasar nashee
+    userToken: null,
+    error: null,
     darkmode: false,
   },
   reducers: {
-    setRedirectState: (state, action) => {
-      state.isRedirected = action.payload
+    setRedirected: (state, action) => {
+      state.isLoggedIn = action.payload
     },
-    setUsername: (state, action) => {
-      state.username = action.payload
+    setErrorState: (state, action) => {
+      state.error = action.payload
+    },
+    clearUserData: (state) => {
+      state.username = null
+      state.userToken = null
+      state.isLoggedIn = null
+      state.isRedirected = false
     },
   },
   extraReducers: (builder) => {
     builder
+      .addCase(fetchAuthRequest.fulfilled, (state, action) => {
+        const status = action.payload.status
+        const username = action.meta.arg.username
+        if (status === 200) {
+          const token = action.payload.data.token
+          localStorage.setItem("token", token)
+          localStorage.setItem("username", username)
+          state.username = username
+          state.userToken = token
+          state.isLoggedIn = true
+        } else {
+          state.isLoggedIn = false
+          state.error = { state: true, message: action.payload.message }
+        }
+      })
       .addCase(fetchGetUserDarkMode.pending, (state, action) => {
         state.loading = true
       })
@@ -48,5 +84,5 @@ const userSlice = createSlice({
   },
 })
 
-export const { setRedirectState, setUsername } = userSlice.actions
+export const { setRedirected, setErrorState, clearUserData } = userSlice.actions
 export default userSlice.reducer

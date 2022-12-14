@@ -23,7 +23,6 @@ export const fetchCreateList = createAsyncThunk(
 export const fetchDeleteList = createAsyncThunk(
   "lists/deleteList",
   async (listTitle) => {
-    console.log(listTitle)
     const response = await listsDeleteList(listTitle)
     return response
   }
@@ -176,7 +175,6 @@ const todoSlice = createSlice({
         }
       })
       .addCase(fetchCreateList.fulfilled, (state, action) => {
-        console.log(action)
         if (action.payload.status === 200) {
           state.lists.push({
             title: action.meta.arg,
@@ -194,7 +192,6 @@ const todoSlice = createSlice({
       })
 
       .addCase(fetchCreateTask.fulfilled, (state, action) => {
-        console.log(action)
         state.tasks.push(action.meta.arg)
       })
 

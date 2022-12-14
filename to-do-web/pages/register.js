@@ -1,16 +1,31 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import Link from "next/link"
 import { useFormik } from "formik"
 import { registerValidation } from "../helpers/validation"
 import { EyeSlashIcon, EyeIcon } from "@heroicons/react/24/outline"
-import { authRequest } from "../api/auth"
+import { useDispatch, useSelector } from "react-redux"
+import { fetchAuthRequest } from "../redux/userSlice"
+import CustomToast from "../components/CustomToast"
 
 const Register = () => {
+  const isLoggedIn = useSelector((state) => state.userReducer.isLoggedIn)
+  const error = useSelector((state) => state.userReducer.error)
   const [showPassword, setShowPassword] = useState(false)
   const [showRepeatedPassword, setShowRepeatedPassword] = useState(false)
-  const [logged, setLogged] = useState(null)
+  const [showToast, setShowToast] = useState(false)
   const router = useRouter()
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      router.push("/to-do")
+    }
+  }, [isLoggedIn])
+
+  useEffect(() => {
+    error !== null && setShowToast(true)
+  }, [error])
 
   const formik = useFormik({
     initialValues: {
@@ -21,23 +36,28 @@ const Register = () => {
     validationSchema: registerValidation(),
 
     onSubmit: (values) => {
-      authRequest(values.username, values.password, "/register").then(
-        (response) => {
-          if (response.status === 200) {
-            setLogged(true)
-            localStorage.setItem("token", response.data.token)
-            localStorage.setItem("username", values.username)
-            router.push("/ToDo")
-          } else {
-            setLogged(false)
-          }
-        }
+      setShowToast(false)
+      const { username, password } = values
+      dispatch(
+        fetchAuthRequest({
+          username: username,
+          password: password,
+          route: "/register",
+        })
       )
     },
   })
 
   return (
-    <div className="w-screen h-screen bg-background1 bg-cover bg-no-repeat">
+    <div className="w-screen h-screen background1 bg-cover bg-no-repeat">
+      {error !== null && (
+        <CustomToast
+          show={showToast}
+          close={() => setShowToast(false)}
+          notifi={error.state && error.message}
+          state={!error.state}
+        />
+      )}
       <form
         className="black-overlay w-full h-full flex justify-center items-center overflow-y-scroll"
         onSubmit={formik.handleSubmit}
@@ -147,11 +167,6 @@ const Register = () => {
               </Link>
             </section>
           </div>
-          {logged === false && (
-            <div className="mx-auto mt-8">
-              <p className="text-red-500"></p>
-            </div>
-          )}
         </div>
       </form>
     </div>

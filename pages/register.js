@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { fetchAuthRequest, userLogged } from "../redux/reducers/userSlice"
 import CustomToast from "../components/CustomToast"
 import { useRegisterMutation } from "../redux/api/userAuth"
+import { DotLoader } from "react-spinners"
 
 const Register = () => {
   const isLoggedIn = useSelector((state) => state.userReducer.isLoggedIn)

@@ -1,6 +1,6 @@
 import { useRef } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { fetchCreateTask, setErrorState } from "../redux/todoSlice"
+import { fetchCreateTask, setErrorState } from "../redux/reducers/todoSlice"
 import { PlusIcon } from "@heroicons/react/24/outline"
 
 const NewTask = () => {

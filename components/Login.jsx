@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import Link from "next/link"
 import { useFormik } from "formik"
@@ -6,36 +6,27 @@ import { loginValidation } from "../helpers/validation"
 import { EyeSlashIcon, EyeIcon } from "@heroicons/react/24/outline"
 import CustomToast from "./CustomToast"
 import { useDispatch, useSelector } from "react-redux"
-import { setErrorState } from "../redux/todoSlice"
-import { fetchAuthRequest, setRedirected } from "../redux/userSlice"
+import { setRedirected, userLogged } from "../redux/reducers/userSlice"
+import { useLoginMutation } from "../redux/api/userAuth"
+import { DotLoader } from "react-spinners"
 
 const Login = () => {
-  const [showPassword, setShowPassword] = useState(false)
   const isLoggedIn = useSelector((state) => state.userReducer.isLoggedIn)
-  const [showToast, setShowToast] = useState(false)
   const isRedirected = useSelector((state) => state.userReducer.isRedirected)
-  const error = useSelector((state) => state.userReducer.error)
+  const [login, { isError, isLoading }] = useLoginMutation()
+  const [showToast, setShowToast] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
+  const [error, setErrorState] = useState(null)
   const dispatch = useDispatch()
   const router = useRouter()
-  const errorChange = useMemo(() => setShowToast(true), [error])
 
   useEffect(() => {
     if (isRedirected) {
-      dispatch(setErrorState({ state: true, message: "Log in before" }))
+      setErrorState({ state: true, message: "Log in before" })
       setShowToast(true)
       setRedirected(false)
     }
   }, [])
-
-  useEffect(() => {
-    if (isLoggedIn && isRedirected === false) {
-      router.push("/to-do")
-    }
-  }, [isLoggedIn])
-
-  useEffect(() => {
-    error !== null && errorChange && setShowToast(true)
-  }, [error])
 
   const formik = useFormik({
     initialValues: {
@@ -44,16 +35,17 @@ const Login = () => {
     },
     validationSchema: loginValidation(),
 
-    onSubmit: (values) => {
-      setShowToast(false)
-      const { username, password } = values
-      dispatch(
-        fetchAuthRequest({
-          username: username,
-          password: password,
-          route: "/login",
-        })
-      )
+    onSubmit: async (values) => {
+      try {
+        const user = await login(values).unwrap()
+        dispatch(
+          userLogged({ username: values.username, token: user.data.token })
+        )
+        router.push("/to-do")
+      } catch (error) {
+        setErrorState({ state: true, message: error?.data.message })
+        setShowToast(true)
+      }
     },
   })
 
@@ -62,7 +54,7 @@ const Login = () => {
       {error !== null && (
         <CustomToast
           show={showToast}
-          close={() => setShowToast(false)}
+          toastOnClose={() => setShowToast(false)}
           notifi={error.state && error.message}
           state={!error.state}
         />
@@ -139,6 +131,7 @@ const Login = () => {
                 Create Now
               </Link>
             </section>
+            <DotLoader color="#1876f2" loading={isLoading} size={30} />
           </div>
         </div>
       </form>

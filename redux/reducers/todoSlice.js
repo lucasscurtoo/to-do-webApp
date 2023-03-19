@@ -1,11 +1,15 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
-import { listsCreateList, listsDeleteList, listsGetLists } from "../api/lists"
+import {
+  listsCreateList,
+  listsDeleteList,
+  listsGetLists,
+} from "../../api/lists"
 import {
   tasksCompleteOrDecomplete,
   tasksCreateTask,
   tasksDeleteTask,
   tasksUpdateTask,
-} from "../api/tasks"
+} from "../../api/tasks"
 
 export const fetchGetLists = createAsyncThunk("lists/getLists", async () => {
   const response = await listsGetLists()

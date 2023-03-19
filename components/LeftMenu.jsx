@@ -8,9 +8,9 @@ import {
   fetchDeleteList,
   selectAList,
   setErrorState,
-} from "../redux/todoSlice"
+} from "../redux/reducers/todoSlice"
 import DeleteMenu from "./DeleteMenu"
-import { clearUserData, logOut } from "../redux/userSlice"
+import { clearUserData, logOut } from "../redux/reducers/userSlice"
 import { useRouter } from "next/router"
 
 const LeftMenu = ({ close }) => {

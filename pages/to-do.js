@@ -10,13 +10,13 @@ import {
 } from "@heroicons/react/24/outline"
 import CustomToast from "../components/CustomToast"
 import { useDispatch, useSelector } from "react-redux"
-import { fetchGetLists } from "../redux/todoSlice"
+import { fetchGetLists } from "../redux/reducers/todoSlice"
 import {
   fetchGetUserDarkMode,
   fetchUpdateUserDarkMode,
   setRedirected,
   clearUserData,
-} from "../redux/userSlice"
+} from "../redux/reducers/userSlice"
 import NewTask from "../components/NewTask"
 import { useTheme } from "next-themes"
 
@@ -63,6 +63,7 @@ const ToDo = () => {
 
   useEffect(() => {
     error !== null && setShowToast(true)
+    //error cahnged?
   }, [error])
 
   useEffect(() => {

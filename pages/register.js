@@ -5,27 +5,19 @@ import { useFormik } from "formik"
 import { registerValidation } from "../helpers/validation"
 import { EyeSlashIcon, EyeIcon } from "@heroicons/react/24/outline"
 import { useDispatch, useSelector } from "react-redux"
-import { fetchAuthRequest } from "../redux/userSlice"
+import { fetchAuthRequest, userLogged } from "../redux/reducers/userSlice"
 import CustomToast from "../components/CustomToast"
+import { useRegisterMutation } from "../redux/api/userAuth"
 
 const Register = () => {
   const isLoggedIn = useSelector((state) => state.userReducer.isLoggedIn)
-  const error = useSelector((state) => state.userReducer.error)
+  const [register, { isError, isLoading }] = useRegisterMutation()
   const [showPassword, setShowPassword] = useState(false)
   const [showRepeatedPassword, setShowRepeatedPassword] = useState(false)
   const [showToast, setShowToast] = useState(false)
+  const [error, setErrorState] = useState(null)
   const router = useRouter()
   const dispatch = useDispatch()
-
-  useEffect(() => {
-    if (isLoggedIn) {
-      router.push("/to-do")
-    }
-  }, [isLoggedIn])
-
-  useEffect(() => {
-    error !== null && setShowToast(true)
-  }, [error])
 
   const formik = useFormik({
     initialValues: {
@@ -35,16 +27,16 @@ const Register = () => {
     },
     validationSchema: registerValidation(),
 
-    onSubmit: (values) => {
-      setShowToast(false)
+    onSubmit: async (values) => {
       const { username, password } = values
-      dispatch(
-        fetchAuthRequest({
-          username: username,
-          password: password,
-          route: "/register",
-        })
-      )
+      try {
+        const user = await register({ username, password }).unwrap()
+        dispatch(userLogged({ username, token: user.data.token }))
+        router.push("/to-do")
+      } catch (error) {
+        setErrorState({ state: true, message: error?.data.message })
+        setShowToast(true)
+      }
     },
   })
 
@@ -53,7 +45,7 @@ const Register = () => {
       {error !== null && (
         <CustomToast
           show={showToast}
-          close={() => setShowToast(false)}
+          toastOnClose={() => setShowToast(false)}
           notifi={error.state && error.message}
           state={!error.state}
         />
@@ -166,6 +158,7 @@ const Register = () => {
                 Login
               </Link>
             </section>
+            <DotLoader color="#1876f2" loading={isLoading} size={30} />
           </div>
         </div>
       </form>

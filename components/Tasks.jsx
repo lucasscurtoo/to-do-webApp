@@ -7,7 +7,7 @@ import {
   fetchUpdateTask,
   handleCompletedOrDecompletedTask,
   setErrorState,
-} from "../redux/todoSlice"
+} from "../redux/reducers/todoSlice"
 
 const Task = ({ todo }) => {
   const [taskDescription, setTaskDescription] = useState(todo?.description)

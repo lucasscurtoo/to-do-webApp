@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
-import { authRequest } from "../api/auth"
-import { usersGetUserDarkMode, usersUpdateUserDarkMode } from "../api/users"
+import { authRequest } from "../../api/auth"
+import { usersGetUserDarkMode, usersUpdateUserDarkMode } from "../../api/users"
 
 export const fetchAuthRequest = createAsyncThunk(
   "/auth/authRequest",
@@ -33,23 +33,28 @@ export const fetchUpdateUserDarkMode = createAsyncThunk(
 const userSlice = createSlice({
   name: "user",
   initialState: {
-    isRedirected: null,
-    isLoggedIn: null,
+    isRedirected: false,
+    isLoggedIn: false,
     username: null,
     userToken: null,
-    error: null,
     darkmode: false,
     loading: false,
   },
   reducers: {
+    userLogged: (state, action) => {
+      const { username, token } = action.payload
+      state.username = username
+      state.isLoggedIn = true
+      state.userToken = token
+      localStorage.setItem("token", token)
+      localStorage.setItem("username", username)
+    },
     setRedirected: (state, action) => {
       state.isRedirected = action.payload
       state.error = { state: true, message: "Log in before" }
     },
-    setErrorState: (state, action) => {
-      state.error = action.payload
-    },
-    clearUserData: (state) => {
+    clearUserData: (state, action) => {
+      console.log(action)
       state.username = null
       state.userToken = null
       localStorage.removeItem("token")
@@ -92,6 +97,6 @@ const userSlice = createSlice({
   },
 })
 
-export const { setRedirected, setErrorState, clearUserData, logOut } =
+export const { setRedirected, clearUserData, logOut, userLogged } =
   userSlice.actions
 export default userSlice.reducer

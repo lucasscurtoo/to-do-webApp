@@ -15,7 +15,6 @@ const Task = ({ todo }) => {
   const [completeOrDecompleteTask] = useCompleteOrDecompleteTaskMutation()
   const [errorState, setErrorState] = useState({})
   const { username } = useSelector((state) => state.userReducer)
-  const { tasks, completedTasks } = useSelector((state) => state.todoReducer)
   const dispatch = useDispatch()
 
   const handleEnter = (event) => {
@@ -40,7 +39,7 @@ const Task = ({ todo }) => {
       })
     }
   }
-  const handleOnCheck = (task) => {
+  const handleOnCheck = () => {
     completeOrDecompleteTask({
       title: todo.title,
       completed: todo.completed,

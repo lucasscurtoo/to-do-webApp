@@ -19,22 +19,15 @@ const todoSlice = createSlice({
     lists: defaultList,
     selectedList: defaultList,
     tasks: [],
-    completedTasks: [],
     darkMode: false,
   },
   reducers: {
     selectAList: (state, action) => {
       const tasks = []
-      const completed = []
       action.payload.todo.map((task) => {
-        if (task.completed) {
-          completed.push(task)
-        } else {
-          tasks.push(task)
-        }
+        if (task) tasks.push(task)
       })
       state.tasks = tasks
-      state.completedTasks = completed
       state.selectedList = action.payload
     },
     setErrorState: (state, action) => {
@@ -56,13 +49,8 @@ const todoSlice = createSlice({
             state.loading = false
             state.lists = lists
             const tasks = []
-            const completed = []
             lists[0].todo.map((task) => {
-              if (task.completed) {
-                completed.push(task)
-              } else {
-                tasks.push(task)
-              }
+              tasks.push(task)
             })
             state.tasks = tasks
             state.selectedList = lists[0]
@@ -120,57 +108,23 @@ const todoSlice = createSlice({
         tasksApi.endpoints.deleteTask.matchFulfilled,
         (state, action) => {
           const tasks = JSON.parse(JSON.stringify(state.tasks))
-          const completedTasks = JSON.parse(
-            JSON.stringify(state.completedTasks)
+          const { description } = action.meta.arg.originalArgs(
+            (state.tasks = tasks.filter(
+              (item) => item.description !== description
+            ))
           )
-          const { completed, description } = action.meta.arg.originalArgs
-          completed
-            ? (state.completedTasks = completedTasks.filter(
-                (item) => item.description !== description
-              ))
-            : (state.tasks = tasks.filter(
-                (item) => item.description !== description
-              ))
         }
       )
       .addMatcher(
         tasksApi.endpoints.completeOrDecompleteTask.matchFulfilled,
         (state, action) => {
           const tasks = JSON.parse(JSON.stringify(state.tasks))
-          const completedTasks = JSON.parse(
-            JSON.stringify(state.completedTasks)
-          )
           const { completed, description } = action.meta.arg.originalArgs
-
-          if (
-            !tasks.some(
-              (currentTask) => currentTask.description === description
-            )
-          ) {
-            completedTasks.map((compTask) => {
-              if (compTask.description === description) {
-                state.tasks.push({
-                  completed: !completed,
-                  description: description,
-                })
-                state.completedTasks = completedTasks.filter(
-                  (item) => item.description !== description
-                )
-              }
-            })
-          } else {
-            tasks.map((task) => {
-              if (task.description === description) {
-                state.completedTasks.push({
-                  completed: !completed,
-                  description: description,
-                })
-                state.tasks = tasks.filter(
-                  (item) => item.description !== description
-                )
-              }
-            })
-          }
+          const index = tasks.findIndex(
+            (elem) => elem.description === description
+          )
+          tasks[index].completed = !completed
+          state.tasks = tasks
         }
       )
   },

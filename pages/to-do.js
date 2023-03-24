@@ -18,17 +18,15 @@ import {
   useGetUserDarkModeQuery,
   useUpdateUserDarkModeMutation,
 } from "../redux/api/users"
+import CompletedTasks from "../components/CompletedTasks"
 
 const ToDo = () => {
   const [closeState, setCloseState] = useState(false)
   const selectedList = useSelector((state) => state.todoReducer.selectedList)
   const tasks = useSelector((state) => state.todoReducer.tasks)
-  const completedTasks = useSelector(
-    (state) => state.todoReducer.completedTasks
-  )
   const { setTheme } = useTheme()
   const [showToast, setShowToast] = useState(false)
-  const [openCompleted, setOpenCompleted] = useState(false)
+
   const [errorState, setErrorState] = useState(false)
   const router = useRouter()
   const { username, isLoggedIn, darkmode } = useSelector(
@@ -36,8 +34,8 @@ const ToDo = () => {
   )
   const [isMobileState, setIsMobileState] = useState(null)
   const dispatch = useDispatch()
-  const { data: data, isError, isLoading } = useGetUserListsQuery(username)
   const [updateDarkmode] = useUpdateUserDarkModeMutation()
+  useGetUserListsQuery(username)
   useGetUserDarkModeQuery(username)
 
   useEffect(() => {
@@ -115,52 +113,22 @@ const ToDo = () => {
               )}
             </section>
             <NewTask />
-            {tasks?.map(
-              (todo) =>
-                todo.completed === false && (
-                  <Task
-                    todo={{
-                      title: selectedList.title,
-                      completed: todo.completed,
-                      description: todo.description,
-                    }}
-                    key={todo.description}
-                  />
-                )
-            )}
-            <div className="w-full mt-4">
-              <section className="flex">
-                <h2 className="text-blueColor">Completed</h2>
-                <ChevronUpIcon
-                  className="w-6 ml-2 text-blueColor transition-all	"
-                  onClick={() => setOpenCompleted(!openCompleted)}
-                  style={{
-                    transition: "transform 200ms linear",
-                    transform: `rotateZ(${openCompleted ? 0 : "180deg"})`,
-                    display: "inline-block",
-                  }}
-                />
-                <p className="pl-2 text-blueColor">{completedTasks.length}</p>
-              </section>
-              <div className="w-full border bg-mediumGray mt-6 mb-2"></div>
-              {openCompleted &&
-                completedTasks.length > 0 &&
-                completedTasks.map((todo) => (
-                  <Task
-                    todo={{
-                      title: selectedList.title,
-                      completed: todo.completed,
-                      description: todo.description,
-                    }}
-                    key={todo.description}
-                  />
-                ))}
-              {completedTasks.length === 0 && (
-                <p className="text-mediumGray dark:text-darkGray pt-2">
-                  Theres no completed tasks yet, go, complete one!
-                </p>
+            <div>
+              {tasks?.map(
+                (todo) =>
+                  todo.completed === false && (
+                    <Task
+                      todo={{
+                        title: selectedList.title,
+                        completed: todo.completed,
+                        description: todo.description,
+                      }}
+                      key={todo.description}
+                    />
+                  )
               )}
             </div>
+            <CompletedTasks tasks={tasks} selectedList={selectedList} />
           </div>
         </div>
       </div>

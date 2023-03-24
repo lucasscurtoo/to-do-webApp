@@ -5,7 +5,7 @@ import { PlusIcon } from "@heroicons/react/24/outline"
 import { useCreateTaskMutation } from "../redux/api/tasks"
 
 const NewTask = () => {
-  const { tasks, completedTasks } = useSelector((state) => state.todoReducer)
+  const { tasks } = useSelector((state) => state.todoReducer)
   const selectedList = useSelector((state) => state.todoReducer.selectedList)
   const { username } = useSelector((state) => state.userReducer)
   const [createNewTask] = useCreateTaskMutation()

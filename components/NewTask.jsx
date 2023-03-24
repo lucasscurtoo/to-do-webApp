@@ -1,13 +1,16 @@
 import { useRef } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { fetchCreateTask, setErrorState } from "../redux/reducers/todoSlice"
+import { setErrorState } from "../redux/reducers/todoSlice"
 import { PlusIcon } from "@heroicons/react/24/outline"
+import { useCreateTaskMutation } from "../redux/api/tasks"
 
 const NewTask = () => {
-  const newTask = useRef(null)
-  const tasks = useSelector((state) => state.todoReducer.tasks)
+  const { tasks, completedTasks } = useSelector((state) => state.todoReducer)
   const selectedList = useSelector((state) => state.todoReducer.selectedList)
+  const { username } = useSelector((state) => state.userReducer)
+  const [createNewTask] = useCreateTaskMutation()
   const dispatch = useDispatch()
+  const newTask = useRef(null)
 
   const handleNewTask = () => {
     const newTaskValue = newTask.current.value
@@ -15,13 +18,12 @@ const NewTask = () => {
     newTask.current.blur()
     if (newTaskValue != "") {
       if (!tasks.some((elem) => elem.description === newTaskValue)) {
-        dispatch(
-          fetchCreateTask({
-            title: selectedList.title,
-            completed: false,
-            description: newTaskValue,
-          })
-        )
+        createNewTask({
+          title: selectedList.title,
+          completed: false,
+          description: newTaskValue,
+          username,
+        })
       } else {
         dispatch(
           setErrorState({ state: true, message: "This task already exists" })

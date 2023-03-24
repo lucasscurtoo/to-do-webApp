@@ -1,34 +1,6 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
-import { authRequest } from "../../api/auth"
-import { usersGetUserDarkMode, usersUpdateUserDarkMode } from "../../api/users"
-
-export const fetchAuthRequest = createAsyncThunk(
-  "/auth/authRequest",
-  async (values) => {
-    const response = await authRequest(
-      values.username,
-      values.password,
-      values.route
-    )
-    return response
-  }
-)
-
-export const fetchGetUserDarkMode = createAsyncThunk(
-  "users/getUserDarkMode",
-  async () => {
-    const response = await usersGetUserDarkMode()
-    return response.data
-  }
-)
-
-export const fetchUpdateUserDarkMode = createAsyncThunk(
-  "users/updateUserDarkMode",
-  async (darkmodeState) => {
-    const response = await usersUpdateUserDarkMode(darkmodeState)
-    return response
-  }
-)
+import { createSlice, isAnyOf } from "@reduxjs/toolkit"
+import { authApi } from "../api/userAuth"
+import { usersApi } from "../api/users"
 
 const userSlice = createSlice({
   name: "user",
@@ -41,62 +13,64 @@ const userSlice = createSlice({
     loading: false,
   },
   reducers: {
-    userLogged: (state, action) => {
-      const { username, token } = action.payload
-      state.username = username
-      state.isLoggedIn = true
-      state.userToken = token
-      localStorage.setItem("token", token)
-      localStorage.setItem("username", username)
-    },
     setRedirected: (state, action) => {
       state.isRedirected = action.payload
       state.error = { state: true, message: "Log in before" }
     },
-    clearUserData: (state, action) => {
-      console.log(action)
+    clearUserData: (state) => {
       state.username = null
       state.userToken = null
       localStorage.removeItem("token")
       localStorage.removeItem("username")
       localStorage.setItem("theme", "light")
     },
-    logOut: (state, action) => {
+    logOut: (state) => {
       state.isLoggedIn = false
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchAuthRequest.fulfilled, (state, action) => {
-        const status = action.payload.status
-        const username = action.meta.arg.username
-        if (status === 200) {
-          const token = action.payload.data.token
-          localStorage.setItem("token", token)
-          localStorage.setItem("username", username)
-          state.username = username
-          state.userToken = token
-          state.isLoggedIn = true
-          state.isRedirected = false
-          state.error = null
-        } else {
-          state.isLoggedIn = false
-          state.error = { state: true, message: action.payload.message }
+      .addMatcher(
+        usersApi.endpoints.updateUserDarkMode.matchFulfilled,
+        (state, action) => {
+          state.darkmode = action.meta.arg.originalArgs.darkmode
         }
-      })
-      .addCase(fetchGetUserDarkMode.pending, (state, action) => {
+      )
+      .addMatcher(usersApi.endpoints.getUserDarkMode.matchPending, (state) => {
         state.loading = true
       })
-      .addCase(fetchGetUserDarkMode.fulfilled, (state, action) => {
-        state.darkmode = action.payload.darkmode
-        state.loading = false
-      })
-      .addCase(fetchUpdateUserDarkMode.fulfilled, (state, action) => {
-        state.darkmode = action.meta.arg
-      })
+      .addMatcher(
+        usersApi.endpoints.getUserDarkMode.matchFulfilled,
+        (state, action) => {
+          state.loading = false
+          state.darkmode = action.payload.data.darkmode
+        }
+      )
+      .addMatcher(
+        isAnyOf(
+          authApi.endpoints.login.matchFulfilled,
+          authApi.endpoints.register.matchFulfilled
+        ),
+        (state, action) => {
+          const status = action.payload.status
+          const username = action.meta.arg.originalArgs.username
+          if (status === 200) {
+            const token = action.payload.data.token
+            localStorage.setItem("token", token)
+            localStorage.setItem("username", username)
+            state.username = username
+            state.userToken = token
+            state.isLoggedIn = true
+            state.isRedirected = false
+            state.error = null
+          } else {
+            state.isLoggedIn = false
+            state.error = { state: true, message: action.payload.message }
+          }
+        }
+      )
   },
 })
 
-export const { setRedirected, clearUserData, logOut, userLogged } =
-  userSlice.actions
+export const { setRedirected, clearUserData, logOut } = userSlice.actions
 export default userSlice.reducer

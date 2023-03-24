@@ -3,24 +3,23 @@ import { ChevronLeftIcon, PlusIcon } from "@heroicons/react/24/outline"
 import { checkIfExists } from "../helpers/functions"
 import DocumentIcon from "../assets/icons/document-icon.svg"
 import { useDispatch, useSelector } from "react-redux"
-import {
-  fetchCreateList,
-  fetchDeleteList,
-  selectAList,
-  setErrorState,
-} from "../redux/reducers/todoSlice"
+import { selectAList } from "../redux/reducers/todoSlice"
 import DeleteMenu from "./DeleteMenu"
-import { clearUserData, logOut } from "../redux/reducers/userSlice"
-import { useRouter } from "next/router"
+import {
+  useCreateUserListMutation,
+  useDeleteUserListMutation,
+} from "../redux/api/lists"
+import LogOut from "./LogOut"
 
 const LeftMenu = ({ close }) => {
-  const lists = useSelector((state) => state.todoReducer.lists)
-  const selectedList = useSelector((state) => state.todoReducer.selectedList)
-  const darkMode = useSelector((state) => state.userReducer.darkmode)
+  const { lists, selectedList } = useSelector((state) => state.todoReducer)
+  const { darkMode, username } = useSelector((state) => state.userReducer)
+  const [errorState, setErrorState] = useState({})
+  const [createUserList] = useCreateUserListMutation()
+  const [deleteUserList] = useDeleteUserListMutation()
   const [isMobileState, setIsMobileState] = useState(null)
   const newList = useRef(null)
   const dispatch = useDispatch()
-  const router = useRouter()
 
   useEffect(() => {
     const width = window.innerWidth
@@ -33,11 +32,9 @@ const LeftMenu = ({ close }) => {
   const createNewList = (listName) => {
     const listExists = checkIfExists(lists, listName)
     if (listExists) {
-      dispatch(
-        setErrorState({ state: true, message: "The list already exists" })
-      )
+      setErrorState({ state: true, message: "The list already exists" })
     } else {
-      dispatch(fetchCreateList(listName))
+      createUserList({ title: listName, username })
     }
   }
 
@@ -50,7 +47,7 @@ const LeftMenu = ({ close }) => {
   }
 
   const handleDeleteList = (listTitle) => {
-    dispatch(fetchDeleteList(listTitle))
+    deleteUserList({ title: listTitle, username })
     dispatch(selectAList(lists[0]))
   }
 
@@ -59,12 +56,6 @@ const LeftMenu = ({ close }) => {
     if (isMobileState) {
       close(true)
     }
-  }
-
-  const handleLogOut = async () => {
-    dispatch(logOut())
-    dispatch(clearUserData())
-    router.push("/")
   }
 
   return (
@@ -117,8 +108,7 @@ const LeftMenu = ({ close }) => {
           </section>
         </section>
         <section className="w-full mt-auto mb-4 pl-3">
-          <h2 onClick={handleLogOut}>Log out</h2>
-          <div className="ml-auto mr-3 relative"></div>
+          <LogOut />
         </section>
       </div>
     </div>

@@ -37,10 +37,7 @@ const Login = () => {
 
     onSubmit: async (values) => {
       try {
-        const user = await login(values).unwrap()
-        dispatch(
-          userLogged({ username: values.username, token: user.data.token })
-        )
+        await login(values).unwrap()
         router.push("/to-do")
       } catch (error) {
         setErrorState({ state: true, message: error?.data.message })

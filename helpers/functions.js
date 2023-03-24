@@ -1,8 +1,7 @@
-export const checkIfExists = (data, item) => {
+export const checkIfExists = (data, item, itemToSearch) => {
   if (data === undefined) {
     return false
-  }
-  if (data.some((elem) => elem.title === item)) {
+  } else if (data.some((elem) => elem[itemToSearch] === item)) {
     return true
   } else {
     return false

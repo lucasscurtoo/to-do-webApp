@@ -10,15 +10,14 @@ import {
 } from "@heroicons/react/24/outline"
 import CustomToast from "../components/CustomToast"
 import { useDispatch, useSelector } from "react-redux"
-import { fetchGetLists } from "../redux/reducers/todoSlice"
-import {
-  fetchGetUserDarkMode,
-  fetchUpdateUserDarkMode,
-  setRedirected,
-  clearUserData,
-} from "../redux/reducers/userSlice"
+import { setRedirected, clearUserData } from "../redux/reducers/userSlice"
 import NewTask from "../components/NewTask"
 import { useTheme } from "next-themes"
+import { useGetUserListsQuery } from "../redux/api/lists"
+import {
+  useGetUserDarkModeQuery,
+  useUpdateUserDarkModeMutation,
+} from "../redux/api/users"
 
 const ToDo = () => {
   const [closeState, setCloseState] = useState(false)
@@ -30,21 +29,22 @@ const ToDo = () => {
   const { setTheme } = useTheme()
   const [showToast, setShowToast] = useState(false)
   const [openCompleted, setOpenCompleted] = useState(false)
-  const error = useSelector((state) => state.todoReducer.error)
+  const [errorState, setErrorState] = useState(false)
   const router = useRouter()
-  const darkMode = useSelector((state) => state.userReducer.darkmode)
+  const { username, isLoggedIn, darkmode } = useSelector(
+    (state) => state.userReducer
+  )
   const [isMobileState, setIsMobileState] = useState(null)
-
   const dispatch = useDispatch()
+  const { data: data, isError, isLoading } = useGetUserListsQuery(username)
+  const [updateDarkmode] = useUpdateUserDarkModeMutation()
+  useGetUserDarkModeQuery(username)
 
   useEffect(() => {
-    if (!localStorage.getItem("token")) {
+    if (!isLoggedIn || username === null) {
       router.push("/")
       dispatch(setRedirected(true))
       dispatch(clearUserData())
-    } else {
-      dispatch(fetchGetLists())
-      dispatch(fetchGetUserDarkMode())
     }
   }, [])
 
@@ -58,30 +58,21 @@ const ToDo = () => {
   }, [])
 
   useEffect(() => {
-    setOpenCompleted(false)
-  }, [selectedList])
+    setTheme(darkmode ? "dark" : "light")
+  }, [darkmode])
 
-  useEffect(() => {
-    error !== null && setShowToast(true)
-    //error cahnged?
-  }, [error])
-
-  useEffect(() => {
-    setTheme(darkMode ? "dark" : "light")
-  }, [darkMode])
-
-  const handleDarkMode = () => {
-    dispatch(fetchUpdateUserDarkMode(!darkMode))
+  const handledarkmode = () => {
+    updateDarkmode({ username, darkmode: !darkmode })
   }
 
   return (
     <div className="w-screen h-screen background1 bg-cover bg-no-repeat">
-      {error !== null && (
+      {errorState !== null && (
         <CustomToast
           show={showToast}
           close={() => setShowToast(false)}
-          notifi={error.state && error.message}
-          state={!error.state}
+          notifi={errorState.state && errorState.message}
+          state={!errorState.state}
         />
       )}
       <div className="black-overlay w-full h-full flex">
@@ -111,15 +102,15 @@ const ToDo = () => {
               ) : (
                 <h1 className="text-mediumGray">{selectedList?.title}</h1>
               )}
-              {darkMode ? (
+              {darkmode ? (
                 <SunIcon
                   className="ml-auto w-8 text-mediumGray hover:text-white"
-                  onClick={handleDarkMode}
+                  onClick={handledarkmode}
                 />
               ) : (
                 <MoonIcon
                   className="ml-auto w-8 text-mediumGray hover:text-black"
-                  onClick={handleDarkMode}
+                  onClick={handledarkmode}
                 />
               )}
             </section>

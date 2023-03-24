@@ -1,16 +1,20 @@
 import { TrashIcon } from "@heroicons/react/24/outline"
-import { useState } from "react"
-import { useDispatch } from "react-redux"
+import { useEffect, useState } from "react"
+import { useDispatch, useSelector } from "react-redux"
 import {
-  fetchCompleteOrDecompleteTask,
-  fetchDeleteTask,
-  fetchUpdateTask,
-  handleCompletedOrDecompletedTask,
-  setErrorState,
-} from "../redux/reducers/todoSlice"
+  useCompleteOrDecompleteTaskMutation,
+  useDeleteTaskMutation,
+  useUpdateTaskMutation,
+} from "../redux/api/tasks"
+import { setErrorState } from "../redux/reducers/todoSlice"
 
 const Task = ({ todo }) => {
   const [taskDescription, setTaskDescription] = useState(todo?.description)
+  const [updateTask] = useUpdateTaskMutation()
+  const [deleteTask] = useDeleteTaskMutation()
+  const [completeOrDecompleteTask] = useCompleteOrDecompleteTaskMutation()
+  const [errorState, setErrorState] = useState({})
+  const { username } = useSelector((state) => state.userReducer)
   const dispatch = useDispatch()
 
   const handleEnter = (event) => {
@@ -21,42 +25,36 @@ const Task = ({ todo }) => {
 
   const handleTaskChange = () => {
     if (todo.description != taskDescription) {
-      dispatch(
-        fetchUpdateTask({
-          title: todo.title,
-          completed: todo.completed,
-          description: todo.description,
-          newDescription: taskDescription,
-        })
-      )
-    } else {
-      dispatch(
-        setErrorState({
-          state: true,
-          message: "Can not update the same task description",
-        })
-      )
-    }
-  }
-  const handleOnCheck = (task) => {
-    dispatch(
-      fetchCompleteOrDecompleteTask({
+      updateTask({
         title: todo.title,
         completed: todo.completed,
         description: todo.description,
+        newDescription: taskDescription,
+        username,
       })
-    )
-    dispatch(handleCompletedOrDecompletedTask(task))
+    } else {
+      setErrorState({
+        state: true,
+        message: "Can not update the same task description",
+      })
+    }
+  }
+  const handleOnCheck = () => {
+    completeOrDecompleteTask({
+      title: todo.title,
+      completed: todo.completed,
+      description: todo.description,
+      username,
+    })
   }
 
   const handleDeleteTask = () => {
-    dispatch(
-      fetchDeleteTask({
-        title: todo.title,
-        completed: todo.completed,
-        description: todo.description,
-      })
-    )
+    deleteTask({
+      title: todo.title,
+      completed: todo.completed,
+      description: todo.description,
+      username,
+    })
   }
 
   return (

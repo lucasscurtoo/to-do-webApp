@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { fetchAuthRequest, userLogged } from "../redux/reducers/userSlice"
 import CustomToast from "../components/CustomToast"
 import { useRegisterMutation } from "../redux/api/userAuth"
+import { DotLoader } from "react-spinners"
 
 const Register = () => {
   const isLoggedIn = useSelector((state) => state.userReducer.isLoggedIn)
@@ -30,8 +31,7 @@ const Register = () => {
     onSubmit: async (values) => {
       const { username, password } = values
       try {
-        const user = await register({ username, password }).unwrap()
-        dispatch(userLogged({ username, token: user.data.token }))
+        await register({ username, password }).unwrap()
         router.push("/to-do")
       } catch (error) {
         setErrorState({ state: true, message: error?.data.message })

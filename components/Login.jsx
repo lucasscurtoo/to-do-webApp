@@ -4,26 +4,23 @@ import Link from "next/link"
 import { useFormik } from "formik"
 import { loginValidation } from "../helpers/validation"
 import { EyeSlashIcon, EyeIcon } from "@heroicons/react/24/outline"
-import CustomToast from "./CustomToast"
 import { useDispatch, useSelector } from "react-redux"
-import { setRedirected, userLogged } from "../redux/reducers/userSlice"
+import { setRedirected } from "../redux/reducers/userSlice"
 import { useLoginMutation } from "../redux/api/userAuth"
 import { DotLoader } from "react-spinners"
+import ShowError from "./ShowError"
+import { setErrorState } from "../redux/reducers/todoSlice"
 
 const Login = () => {
-  const isLoggedIn = useSelector((state) => state.userReducer.isLoggedIn)
   const isRedirected = useSelector((state) => state.userReducer.isRedirected)
-  const [login, { isError, isLoading }] = useLoginMutation()
-  const [showToast, setShowToast] = useState(false)
+  const [login, { isLoading }] = useLoginMutation()
   const [showPassword, setShowPassword] = useState(false)
-  const [error, setErrorState] = useState(null)
   const dispatch = useDispatch()
   const router = useRouter()
 
   useEffect(() => {
     if (isRedirected) {
-      setErrorState({ state: true, message: "Log in before" })
-      setShowToast(true)
+      dispatch(setErrorState({ state: true, message: "Log in before" }))
       setRedirected(false)
     }
   }, [])
@@ -40,7 +37,7 @@ const Login = () => {
         await login(values).unwrap()
         router.push("/to-do")
       } catch (error) {
-        setErrorState({ state: true, message: error?.data.message })
+        dispatch(setErrorState({ state: true, message: error?.data.message }))
         setShowToast(true)
       }
     },
@@ -48,14 +45,7 @@ const Login = () => {
 
   return (
     <div className="w-screen h-screen background1 bg-cover bg-no-repeat">
-      {error !== null && (
-        <CustomToast
-          show={showToast}
-          toastOnClose={() => setShowToast(false)}
-          notifi={error.state && error.message}
-          state={!error.state}
-        />
-      )}
+      <ShowError />
       <form
         className="black-overlay w-full h-full flex justify-center items-center"
         onSubmit={formik.handleSubmit}

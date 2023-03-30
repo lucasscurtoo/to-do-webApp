@@ -1,22 +1,19 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useRouter } from "next/router"
 import Link from "next/link"
 import { useFormik } from "formik"
 import { registerValidation } from "../helpers/validation"
 import { EyeSlashIcon, EyeIcon } from "@heroicons/react/24/outline"
-import { useDispatch, useSelector } from "react-redux"
-import { fetchAuthRequest, userLogged } from "../redux/reducers/userSlice"
-import CustomToast from "../components/CustomToast"
+import { useDispatch } from "react-redux"
 import { useRegisterMutation } from "../redux/api/userAuth"
 import { DotLoader } from "react-spinners"
+import ShowError from "../components/ShowError"
+import { setErrorState } from "../redux/reducers/todoSlice"
 
 const Register = () => {
-  const isLoggedIn = useSelector((state) => state.userReducer.isLoggedIn)
-  const [register, { isError, isLoading }] = useRegisterMutation()
+  const [register, { isLoading }] = useRegisterMutation()
   const [showPassword, setShowPassword] = useState(false)
   const [showRepeatedPassword, setShowRepeatedPassword] = useState(false)
-  const [showToast, setShowToast] = useState(false)
-  const [error, setErrorState] = useState(null)
   const router = useRouter()
   const dispatch = useDispatch()
 
@@ -34,22 +31,14 @@ const Register = () => {
         await register({ username, password }).unwrap()
         router.push("/to-do")
       } catch (error) {
-        setErrorState({ state: true, message: error?.data.message })
-        setShowToast(true)
+        dispatch(setErrorState({ state: true, message: error?.data.message }))
       }
     },
   })
 
   return (
     <div className="w-screen h-screen background1 bg-cover bg-no-repeat">
-      {error !== null && (
-        <CustomToast
-          show={showToast}
-          toastOnClose={() => setShowToast(false)}
-          notifi={error.state && error.message}
-          state={!error.state}
-        />
-      )}
+      <ShowError />
       <form
         className="black-overlay w-full h-full flex justify-center items-center overflow-y-scroll"
         onSubmit={formik.handleSubmit}

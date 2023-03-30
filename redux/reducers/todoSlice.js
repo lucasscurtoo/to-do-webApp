@@ -17,28 +17,18 @@ const todoSlice = createSlice({
     loading: false,
     error: null,
     lists: defaultList,
-    selectedList: defaultList,
-    tasks: [],
-    completedTasks: [],
+    currentList: defaultList,
     darkMode: false,
   },
   reducers: {
     selectAList: (state, action) => {
-      const tasks = []
-      const completed = []
-      action.payload.todo.map((task) => {
-        if (task.completed) {
-          completed.push(task)
-        } else {
-          tasks.push(task)
-        }
-      })
-      state.tasks = tasks
-      state.completedTasks = completed
-      state.selectedList = action.payload
+      state.currentList = action.payload
     },
     setErrorState: (state, action) => {
       state.error = action.payload
+    },
+    clearErrorState: (state) => {
+      state.error = null
     },
   },
   extraReducers: (builder) => {
@@ -50,37 +40,21 @@ const todoSlice = createSlice({
         listsApi.endpoints.getUserLists.matchFulfilled,
         (state, action) => {
           const lists = action.payload.data
-          if (lists === undefined) {
-            state.lists = defaultList
-          } else {
+          if (lists != undefined) {
             state.loading = false
             state.lists = lists
-            const tasks = []
-            const completed = []
-            lists[0].todo.map((task) => {
-              if (task.completed) {
-                completed.push(task)
-              } else {
-                tasks.push(task)
-              }
-            })
-            state.tasks = tasks
-            state.selectedList = lists[0]
+            state.currentList = lists[0]
           }
         }
       )
       .addMatcher(
         listsApi.endpoints.createUserList.matchFulfilled,
         (state, action) => {
-          if (action.payload.status === 200) {
-            state.lists.push({
-              title: action.meta.arg.originalArgs.title,
-              todo: [],
-              username: localStorage.getItem("username"),
-            })
-          } else {
-            state.error = { state: true, message: action.payload.message }
-          }
+          state.lists.push({
+            title: action.meta.arg.originalArgs.title,
+            todo: [],
+            username: localStorage.getItem("username"),
+          })
         }
       )
       .addMatcher(
@@ -94,87 +68,69 @@ const todoSlice = createSlice({
       .addMatcher(
         tasksApi.endpoints.createTask.matchFulfilled,
         (state, action) => {
-          const { completed, description } = action.meta.arg.originalArgs
-          state.tasks.push({ completed, description })
+          const { title, completed, description } = action.meta.arg.originalArgs
+          const lists = JSON.parse(JSON.stringify(state.lists))
+          lists.map((elem, index) => {
+            elem.title === title
+              ? state.lists[index].todo.push({ completed, description })
+              : elem.todo
+          })
+          state.currentList.todo.push({ completed, description })
         }
       )
       .addMatcher(
         tasksApi.endpoints.updateTask.matchFulfilled,
         (state, action) => {
-          const tasks = JSON.parse(JSON.stringify(state.tasks))
-          const { completed, description, newDescription } =
+          const lists = JSON.parse(JSON.stringify(state.lists))
+          const currentList = JSON.parse(JSON.stringify(state.currentList))
+          const { completed, description, newDescription, title } =
             action.meta.arg.originalArgs
-          const oldDescIndex = tasks.findIndex(
-            (elem) => elem.description === description
+          const tasks = currentList.todo
+          const listIndex = lists.findIndex((list) => list.title === title)
+          lists[listIndex].todo.map((task, index) =>
+            task.description === description
+              ? (tasks[index] = {
+                  completed,
+                  description: newDescription,
+                })
+              : task
           )
-          if ((oldDescIndex) => 0) {
-            tasks[oldDescIndex] = {
-              completed: completed,
-              description: newDescription,
-            }
-            state.tasks = tasks
-          }
+          state.lists[listIndex].todo = tasks
+          state.currentList.todo = tasks
         }
       )
       .addMatcher(
         tasksApi.endpoints.deleteTask.matchFulfilled,
         (state, action) => {
-          const tasks = JSON.parse(JSON.stringify(state.tasks))
-          const completedTasks = JSON.parse(
-            JSON.stringify(state.completedTasks)
+          const lists = JSON.parse(JSON.stringify(state.lists))
+          const currentList = JSON.parse(JSON.stringify(state.currentList))
+          const { description, title } = action.meta.arg.originalArgs
+          const tasks = currentList.todo
+          const listIndex = lists.findIndex((list) => list.title === title)
+          state.lists[listIndex].todo = tasks.filter(
+            (item) => item.description !== description
           )
-          const { completed, description } = action.meta.arg.originalArgs
-          completed
-            ? (state.completedTasks = completedTasks.filter(
-                (item) => item.description !== description
-              ))
-            : (state.tasks = tasks.filter(
-                (item) => item.description !== description
-              ))
+          state.currentList.todo = tasks.filter(
+            (item) => item.description !== description
+          )
         }
       )
       .addMatcher(
         tasksApi.endpoints.completeOrDecompleteTask.matchFulfilled,
         (state, action) => {
-          const tasks = JSON.parse(JSON.stringify(state.tasks))
-          const completedTasks = JSON.parse(
-            JSON.stringify(state.completedTasks)
+          const lists = JSON.parse(JSON.stringify(state.lists))
+          const { title, completed, description } = action.meta.arg.originalArgs
+          const listIndex = lists.findIndex((list) => list.title === title)
+          lists[listIndex].todo.map((item, index) =>
+            item.description === description
+              ? ((state.lists[listIndex].todo[index].completed = !completed),
+                (state.currentList.todo[index].completed = !completed))
+              : item
           )
-          const { completed, description } = action.meta.arg.originalArgs
-
-          if (
-            !tasks.some(
-              (currentTask) => currentTask.description === description
-            )
-          ) {
-            completedTasks.map((compTask) => {
-              if (compTask.description === description) {
-                state.tasks.push({
-                  completed: !completed,
-                  description: description,
-                })
-                state.completedTasks = completedTasks.filter(
-                  (item) => item.description !== description
-                )
-              }
-            })
-          } else {
-            tasks.map((task) => {
-              if (task.description === description) {
-                state.completedTasks.push({
-                  completed: !completed,
-                  description: description,
-                })
-                state.tasks = tasks.filter(
-                  (item) => item.description !== description
-                )
-              }
-            })
-          }
         }
       )
   },
 })
 
-export const { selectAList, setErrorState } = todoSlice.actions
+export const { selectAList, setErrorState, clearErrorState } = todoSlice.actions
 export default todoSlice.reducer

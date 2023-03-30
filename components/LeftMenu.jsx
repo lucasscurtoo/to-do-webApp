@@ -10,29 +10,24 @@ import {
   useDeleteUserListMutation,
 } from "../redux/api/lists"
 import LogOut from "./LogOut"
+import { useIsMobile } from "../hooks/useIsMobile"
 
-const LeftMenu = ({ close }) => {
-  const { lists, selectedList } = useSelector((state) => state.todoReducer)
+const LeftMenu = ({ closeMenu }) => {
+  const lists = useSelector((state) => state.todoReducer.lists)
+  const currentList = useSelector((state) => state.todoReducer.currentList)
   const { darkMode, username } = useSelector((state) => state.userReducer)
-  const [errorState, setErrorState] = useState({})
   const [createUserList] = useCreateUserListMutation()
   const [deleteUserList] = useDeleteUserListMutation()
-  const [isMobileState, setIsMobileState] = useState(null)
+  const { isMobile } = useIsMobile()
   const newList = useRef(null)
   const dispatch = useDispatch()
-
-  useEffect(() => {
-    const width = window.innerWidth
-    const isMobile = width < 768 ? true : false
-    if (isMobile) {
-      setIsMobileState(true)
-    }
-  }, [])
 
   const createNewList = (listName) => {
     const listExists = checkIfExists(lists, listName)
     if (listExists) {
-      setErrorState({ state: true, message: "The list already exists" })
+      dispatch(
+        setErrorState({ state: true, message: "The list already exists" })
+      )
     } else {
       createUserList({ title: listName, username })
     }
@@ -53,8 +48,8 @@ const LeftMenu = ({ close }) => {
 
   const handleSelectedList = (list) => {
     dispatch(selectAList(list))
-    if (isMobileState) {
-      close(true)
+    if (isMobile) {
+      closeMenu()
     }
   }
 
@@ -62,7 +57,7 @@ const LeftMenu = ({ close }) => {
     <div className="bg-white dark:bg-primaryDarkColor w-2/4 md:w-full h-screen md:h-full shadow-lg absolute z-10 md:static">
       <div className="py-6 px-4 h-full flex flex-col menuLeftCounters">
         <section
-          onClick={() => close(true)}
+          onClick={closeMenu}
           className={`w-full flex items-center cursor-pointer mt-4 ml-2 ${
             darkMode ? "parentHoverWhite" : "parentHoverBlack"
           }`}
@@ -74,7 +69,7 @@ const LeftMenu = ({ close }) => {
           {lists?.map((list) => (
             <div
               className={`flex w-full items-center menuLeftCounters ${
-                selectedList.title === list.title
+                currentList?.title === list.title
                   ? "text-black dark:text-white"
                   : "text-mediumGray"
               }`}
@@ -85,7 +80,7 @@ const LeftMenu = ({ close }) => {
                 <DeleteMenu onClick={() => handleDeleteList(list.title)} />
                 <DocumentIcon
                   stroke={
-                    selectedList.title === list.title
+                    currentList?.title === list.title
                       ? darkMode
                         ? "white"
                         : "black"

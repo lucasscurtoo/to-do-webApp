@@ -1,12 +1,10 @@
 import { useRef } from "react"
-import { useDispatch, useSelector } from "react-redux"
-import { setErrorState } from "../redux/reducers/todoSlice"
 import { PlusIcon } from "@heroicons/react/24/outline"
+import { useDispatch, useSelector } from "react-redux"
 import { useCreateTaskMutation } from "../redux/api/tasks"
 
 const NewTask = () => {
-  const { tasks, completedTasks } = useSelector((state) => state.todoReducer)
-  const selectedList = useSelector((state) => state.todoReducer.selectedList)
+  const currentList = useSelector((state) => state.todoReducer.currentList)
   const { username } = useSelector((state) => state.userReducer)
   const [createNewTask] = useCreateTaskMutation()
   const dispatch = useDispatch()
@@ -16,10 +14,11 @@ const NewTask = () => {
     const newTaskValue = newTask.current.value
     newTask.current.value = ""
     newTask.current.blur()
+
     if (newTaskValue != "") {
-      if (!tasks.some((elem) => elem.description === newTaskValue)) {
+      if (!currentList.todo.some((elem) => elem.description === newTaskValue)) {
         createNewTask({
-          title: selectedList.title,
+          title: currentList.title,
           completed: false,
           description: newTaskValue,
           username,
@@ -50,7 +49,7 @@ const NewTask = () => {
         />
         <button
           className="ml-auto mr-8 text-mediumGray py-1 px-5 border-2 border-blueColor text-xs rounded-sm hover:bg-blueColor hover:text-white"
-          onClick={() => handleNewTask()}
+          onClick={handleNewTask}
         >
           Add
         </button>

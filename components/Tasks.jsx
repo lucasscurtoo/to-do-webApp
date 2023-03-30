@@ -1,22 +1,18 @@
 import { TrashIcon } from "@heroicons/react/24/outline"
-import { useEffect, useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
+import { useState } from "react"
+import { useSelector } from "react-redux"
 import {
   useCompleteOrDecompleteTaskMutation,
   useDeleteTaskMutation,
   useUpdateTaskMutation,
 } from "../redux/api/tasks"
-import { setErrorState } from "../redux/reducers/todoSlice"
 
 const Task = ({ todo }) => {
   const [taskDescription, setTaskDescription] = useState(todo?.description)
   const [updateTask] = useUpdateTaskMutation()
   const [deleteTask] = useDeleteTaskMutation()
   const [completeOrDecompleteTask] = useCompleteOrDecompleteTaskMutation()
-  const [errorState, setErrorState] = useState({})
   const { username } = useSelector((state) => state.userReducer)
-  const { tasks, completedTasks } = useSelector((state) => state.todoReducer)
-  const dispatch = useDispatch()
 
   const handleEnter = (event) => {
     if (event.key === "Enter") {
@@ -33,14 +29,9 @@ const Task = ({ todo }) => {
         newDescription: taskDescription,
         username,
       })
-    } else {
-      setErrorState({
-        state: true,
-        message: "Can not update the same task description",
-      })
     }
   }
-  const handleOnCheck = (task) => {
+  const handleOnCheck = () => {
     completeOrDecompleteTask({
       title: todo.title,
       completed: todo.completed,
@@ -58,18 +49,18 @@ const Task = ({ todo }) => {
     })
   }
 
+  const handleTaskDescription = (event) => {
+    setTaskDescription(event.target.value)
+  }
+
   return (
     <div className="w-full h-16 md:h-20 md:min-h-20 bg-white dark:bg-thirdDarkColor mx-auto shadow-md mb-4">
       <div className="w-full h-full flex items-center ">
         <label className="checkboxRound-contain ml-4 flex items-center h-7">
           {todo.completed ? (
-            <input
-              type="checkbox"
-              checked
-              onChange={() => handleOnCheck(todo)}
-            />
+            <input type="checkbox" checked onChange={handleOnCheck} />
           ) : (
-            <input type="checkbox" onChange={() => handleOnCheck(todo)} />
+            <input type="checkbox" onChange={handleOnCheck} />
           )}
           <div className="checkboxRound-input"></div>
         </label>
@@ -78,7 +69,7 @@ const Task = ({ todo }) => {
           className="ml-4 w-full pr-2 bg-transparent dark:text-white dark:hover:text-mediumGray dark:focus:text-mediumGray text-mediumGray hover:text-black focus:text-black"
           placeholder={todo.description}
           value={taskDescription}
-          onChange={(e) => setTaskDescription(e.target.value)}
+          onChange={handleTaskDescription}
           onKeyDown={handleEnter}
           onBlur={handleTaskChange}
         />

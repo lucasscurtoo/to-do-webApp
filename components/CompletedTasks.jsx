@@ -2,8 +2,8 @@ import { ChevronUpIcon } from "@heroicons/react/24/outline"
 import { useState } from "react"
 import Task from "./Tasks"
 
-const CompletedTasks = ({ tasks, selectedList }) => {
-  const [openCompleted, setOpenCompleted] = useState(false)
+const CompletedTasks = ({ tasks, currentList }) => {
+  const [openCompleted, setOpenCompleted] = useState(true)
 
   return (
     <div className="w-full mt-4">
@@ -20,7 +20,7 @@ const CompletedTasks = ({ tasks, selectedList }) => {
         />
         <p className="pl-2 text-blueColor">
           {
-            tasks.reduce((number, task) => {
+            tasks?.reduce((number, task) => {
               task.completed === true && number.push(task)
               return number
             }, []).length
@@ -34,7 +34,7 @@ const CompletedTasks = ({ tasks, selectedList }) => {
             todo.completed === true && (
               <Task
                 todo={{
-                  title: selectedList.title,
+                  title: currentList.title,
                   completed: todo.completed,
                   description: todo.description,
                 }}
@@ -42,7 +42,7 @@ const CompletedTasks = ({ tasks, selectedList }) => {
               />
             )
         )}
-      {tasks.map((task) => task.completed).length === 0 && (
+      {tasks?.map((task) => task.completed).length === 0 && (
         <p className="text-mediumGray dark:text-darkGray pt-2">
           Theres no completed tasks yet, go, complete one!
         </p>

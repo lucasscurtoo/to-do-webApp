@@ -1,7 +1,7 @@
-import { Provider } from "react-redux";
+import { Provider } from "react-redux"
 import store from "../redux/store"
-import { ThemeProvider } from 'next-themes';
-;import "../styles/globals.css"
+import { ThemeProvider } from "next-themes"
+import "../styles/globals.css"
 import "../styles/checkbox.css"
 
 function MyApp({ Component, pageProps }) {
@@ -9,7 +9,7 @@ function MyApp({ Component, pageProps }) {
     <Provider store={store}>
       <ThemeProvider enableSystem={true} attribute="class">
         <Component {...pageProps} />
-        </ThemeProvider>
+      </ThemeProvider>
     </Provider>
   )
 }

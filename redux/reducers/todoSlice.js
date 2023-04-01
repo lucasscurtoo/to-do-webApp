@@ -14,7 +14,7 @@ const defaultList = [
 const todoSlice = createSlice({
   name: "todo",
   initialState: {
-    loading: false,
+    loading: true,
     error: null,
     lists: defaultList,
     currentList: defaultList,
@@ -33,9 +33,6 @@ const todoSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addMatcher(listsApi.endpoints.getUserLists.matchPending, (state) => {
-        state.loading = true
-      })
       .addMatcher(
         listsApi.endpoints.getUserLists.matchFulfilled,
         (state, action) => {

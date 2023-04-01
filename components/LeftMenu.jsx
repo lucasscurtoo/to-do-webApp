@@ -18,7 +18,7 @@ const LeftMenu = ({ closeMenu }) => {
   const { darkMode, username } = useSelector((state) => state.userReducer)
   const [createUserList] = useCreateUserListMutation()
   const [deleteUserList] = useDeleteUserListMutation()
-  const { isMobile } = useIsMobile()
+  const { isMobileState } = useIsMobile()
   const newList = useRef(null)
   const dispatch = useDispatch()
 
@@ -48,7 +48,7 @@ const LeftMenu = ({ closeMenu }) => {
 
   const handleSelectedList = (list) => {
     dispatch(selectAList(list))
-    if (isMobile) {
+    if (isMobileState) {
       closeMenu()
     }
   }

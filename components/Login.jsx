@@ -10,6 +10,7 @@ import { useLoginMutation } from "../redux/api/userAuth"
 import { DotLoader } from "react-spinners"
 import { setErrorState } from "../redux/reducers/todoSlice"
 import dynamic from "next/dynamic"
+import BackgroundImage from "./BackgroundImage"
 
 const ShowError = dynamic(() => import("../components/ShowError"))
 
@@ -46,10 +47,11 @@ const Login = () => {
   })
 
   return (
-    <div className="w-screen h-screen background1 bg-cover bg-no-repeat">
+    <div className="w-screen h-screen">
+      <BackgroundImage />
       <ShowError />
       <form
-        className="black-overlay w-full h-full flex justify-center items-center"
+        className="black-overlay w-full h-full flex justify-center items-center z-10 relative"
         onSubmit={formik.handleSubmit}
       >
         <div className="w-full lg:w-1/3 h-4/5 text-white flex flex-col">

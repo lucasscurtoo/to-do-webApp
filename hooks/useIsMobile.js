@@ -2,7 +2,7 @@ import { useState } from "react"
 import { useEffect } from "react"
 
 export const useIsMobile = () => {
-  const [isMobile, setIsMobileState] = useState(false)
+  const [isMobileState, setIsMobileState] = useState()
 
   useEffect(() => {
     const width = window.innerWidth
@@ -13,6 +13,6 @@ export const useIsMobile = () => {
   }, [])
 
   return {
-    isMobile,
+    isMobileState,
   }
 }

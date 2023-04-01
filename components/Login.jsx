@@ -8,8 +8,10 @@ import { useDispatch, useSelector } from "react-redux"
 import { setRedirected } from "../redux/reducers/userSlice"
 import { useLoginMutation } from "../redux/api/userAuth"
 import { DotLoader } from "react-spinners"
-import ShowError from "./ShowError"
 import { setErrorState } from "../redux/reducers/todoSlice"
+import dynamic from "next/dynamic"
+
+const ShowError = dynamic(() => import("../components/ShowError"))
 
 const Login = () => {
   const isRedirected = useSelector((state) => state.userReducer.isRedirected)
@@ -21,7 +23,7 @@ const Login = () => {
   useEffect(() => {
     if (isRedirected) {
       dispatch(setErrorState({ state: true, message: "Log in before" }))
-      setRedirected(false)
+      dispatch(setRedirected(false))
     }
   }, [])
 

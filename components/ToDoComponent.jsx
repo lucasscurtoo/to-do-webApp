@@ -1,12 +1,14 @@
 import { ChevronRightIcon } from "@heroicons/react/24/outline"
+import dynamic from "next/dynamic"
 import { useEffect } from "react"
 import { useState } from "react"
 import { useSelector } from "react-redux"
-import CompletedTasks from "./CompletedTasks"
-import DarkMode from "./DarkMode"
-import LeftMenu from "./LeftMenu"
-import NewTask from "./NewTask"
-import ShowError from "./ShowError"
+
+const ShowError = dynamic(() => import("./ShowError"))
+const DarkMode = dynamic(() => import("./DarkMode"))
+const LeftMenu = dynamic(() => import("./LeftMenu"))
+const NewTask = dynamic(() => import("./NewTask"))
+const CompletedTasks = dynamic(() => import("./CompletedTasks"))
 
 const ToDoComponent = ({ isMobileState, darkmode }) => {
   const username = useSelector((state) => state.userReducer.username)

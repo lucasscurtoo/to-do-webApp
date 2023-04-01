@@ -7,8 +7,10 @@ import { EyeSlashIcon, EyeIcon } from "@heroicons/react/24/outline"
 import { useDispatch } from "react-redux"
 import { useRegisterMutation } from "../redux/api/userAuth"
 import { DotLoader } from "react-spinners"
-import ShowError from "../components/ShowError"
 import { setErrorState } from "../redux/reducers/todoSlice"
+import dynamic from "next/dynamic"
+
+const ShowError = dynamic(() => import("../components/ShowError"))
 
 const Register = () => {
   const [register, { isLoading }] = useRegisterMutation()

@@ -3,6 +3,7 @@ import dynamic from "next/dynamic"
 import { useEffect } from "react"
 import { useState } from "react"
 import { useSelector } from "react-redux"
+import BackgroundImage from "./BackgroundImage"
 
 const ShowError = dynamic(() => import("./ShowError"))
 const DarkMode = dynamic(() => import("./DarkMode"))
@@ -24,9 +25,10 @@ const ToDoComponent = ({ isMobileState, darkmode }) => {
   }
 
   return (
-    <div className="w-screen h-screen background1 bg-cover bg-no-repeat">
+    <div className="w-screen h-screen">
+      <BackgroundImage />
       <ShowError />
-      <div className="black-overlay w-full h-full flex">
+      <div className="black-overlay w-full h-full flex z-10 relative">
         <div className="md:bg-secondGrayColor md:dark:bg-secondDarkColor w-full h-full md:w-4/5 md:h-90% m-auto flex">
           {!closeMenu && (
             <div className="w-full md:w-1/6 h-full flex absolute md:static">

@@ -40,6 +40,7 @@ const userSlice = createSlice({
       .addMatcher(
         usersApi.endpoints.updateUserDarkMode.matchFulfilled,
         (state, action) => {
+          console.log(action)
           state.darkmode = action.meta.arg.originalArgs.darkmode
         }
       )

@@ -15,7 +15,7 @@ import { useIsMobile } from "../hooks/useIsMobile"
 const LeftMenu = ({ closeMenu }) => {
   const lists = useSelector((state) => state.todoReducer.lists)
   const currentList = useSelector((state) => state.todoReducer.currentList)
-  const { darkMode, username } = useSelector((state) => state.userReducer)
+  const { darkmode, username } = useSelector((state) => state.userReducer)
   const [createUserList] = useCreateUserListMutation()
   const [deleteUserList] = useDeleteUserListMutation()
   const { isMobileState } = useIsMobile()
@@ -53,13 +53,15 @@ const LeftMenu = ({ closeMenu }) => {
     }
   }
 
+  console.log(darkmode)
+
   return (
-    <div className="bg-white dark:bg-primaryDarkColor w-2/4 md:w-full h-screen md:h-full shadow-lg absolute z-10 md:static">
+    <div className="bg-white dark:bg-primaryDarkColor w-2/4 md:w-full h-full md:h-full shadow-lg absolute z-10 md:static">
       <div className="py-6 px-4 h-full flex flex-col menuLeftCounters">
         <section
           onClick={closeMenu}
           className={`w-full flex items-center cursor-pointer mt-4 ml-2 ${
-            darkMode ? "parentHoverWhite" : "parentHoverBlack"
+            darkmode ? "parentHoverWhite" : "parentHoverBlack"
           }`}
         >
           <ChevronLeftIcon className="w-6 text-mediumGray childHover transition-all duration-300 hover:rotate-180" />
@@ -81,7 +83,7 @@ const LeftMenu = ({ closeMenu }) => {
                 <DocumentIcon
                   stroke={
                     currentList?.title === list.title
-                      ? darkMode
+                      ? darkmode
                         ? "white"
                         : "black"
                       : "gray"

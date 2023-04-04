@@ -1,7 +1,9 @@
 import BackgroundImage from "./BackgroundImage"
 import LogoToDo from "../public/logo-todo.png"
 import Image from "next/image"
-import { BarLoader } from "react-spinners"
+import dynamic from "next/dynamic"
+
+const BarLoader = dynamic(() => import("react-spinners/BarLoader"))
 
 const Loading = () => {
   return (

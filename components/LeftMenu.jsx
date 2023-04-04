@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react"
+import { useRef } from "react"
 import { ChevronLeftIcon, PlusIcon } from "@heroicons/react/24/outline"
 import { checkIfExists } from "../helpers/functions"
 import DocumentIcon from "../assets/icons/document-icon.svg"

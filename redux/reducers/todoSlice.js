@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
+import { HYDRATE } from "next-redux-wrapper"
 import { listsApi } from "../api/lists"
 import { tasksApi } from "../api/tasks"
 
@@ -33,6 +34,13 @@ const todoSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(HYDRATE, (state, action) => {
+        return {
+          ...state,
+          ...action.payload[todoSlice.name],
+          ...action.payload[listsApi.reducerPath],
+        }
+      })
       .addMatcher(
         listsApi.endpoints.getUserLists.matchFulfilled,
         (state, action) => {

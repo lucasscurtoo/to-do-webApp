@@ -1,7 +1,8 @@
 import { ArrowLeftOnRectangleIcon } from "@heroicons/react/24/outline"
 import { useRouter } from "next/router"
+import { memo } from "react"
 import { useDispatch } from "react-redux"
-import { clearUserData, logOut } from "../redux/reducers/userSlice"
+import { clearUserData, logOut } from "../../redux/reducers/userSlice"
 
 const LogOut = () => {
   const dispatch = useDispatch()
@@ -18,10 +19,10 @@ const LogOut = () => {
       className="flex items-center parentHoverWhite parentHoverBlack w-fit"
       onClick={handleLogOut}
     >
-      <h2 className="text-mediumGray childHover">Log out</h2>
       <ArrowLeftOnRectangleIcon className="w-6 ml-2 text-mediumGray childHover" />
+      <h2 className="text-mediumGray childHover">Log out</h2>
     </div>
   )
 }
 
-export default LogOut
+export default memo(LogOut)

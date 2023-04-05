@@ -1,9 +1,12 @@
 import { ChevronUpIcon } from "@heroicons/react/24/outline"
-import { useState } from "react"
-import Task from "./Tasks"
+import { memo, useMemo, useState } from "react"
+import Task from "./Task"
 
 const CompletedTasks = ({ tasks, currentList }) => {
   const [openCompleted, setOpenCompleted] = useState(true)
+  const completedTasks = useMemo(() => {
+    return tasks.filter((todo) => todo.completed === true)
+  }, [tasks])
 
   return (
     <div className="w-full mt-4">
@@ -18,31 +21,21 @@ const CompletedTasks = ({ tasks, currentList }) => {
             display: "inline-block",
           }}
         />
-        <p className="pl-2 text-blueColor">
-          {
-            tasks?.reduce((number, task) => {
-              task.completed === true && number.push(task)
-              return number
-            }, []).length
-          }
-        </p>
+        <p className="pl-2 text-blueColor">{completedTasks.length}</p>
       </section>
       <div className="w-full border bg-mediumGray mt-6 mb-2"></div>
       {openCompleted &&
-        tasks?.map(
-          (todo) =>
-            todo.completed === true && (
-              <Task
-                todo={{
-                  title: currentList.title,
-                  completed: todo.completed,
-                  description: todo.description,
-                }}
-                key={todo.description}
-              />
-            )
-        )}
-      {tasks?.map((task) => task.completed).length === 0 && (
+        completedTasks.map((task) => (
+          <Task
+            key={task.description}
+            todo={{
+              title: currentList.title,
+              completed: task.completed,
+              description: task.description,
+            }}
+          />
+        ))}
+      {!completedTasks.length && (
         <p className="text-mediumGray dark:text-darkGray pt-2">
           Theres no completed tasks yet, go, complete one!
         </p>
@@ -51,4 +44,4 @@ const CompletedTasks = ({ tasks, currentList }) => {
   )
 }
 
-export default CompletedTasks
+export default memo(CompletedTasks)

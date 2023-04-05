@@ -1,28 +1,33 @@
 import { ChevronRightIcon } from "@heroicons/react/24/outline"
-import dynamic from "next/dynamic"
-import { useEffect } from "react"
-import { useState } from "react"
+import { useMemo, useState, useCallback, useEffect } from "react"
 import { useSelector } from "react-redux"
-import BackgroundImage from "./BackgroundImage"
-
-const ShowError = dynamic(() => import("./ShowError"))
-const DarkMode = dynamic(() => import("./DarkMode"))
-const LeftMenu = dynamic(() => import("./LeftMenu"))
-const NewTask = dynamic(() => import("./NewTask"))
-const CompletedTasks = dynamic(() => import("./CompletedTasks"))
+import BackgroundImage from "../BackgroundImage"
+import CompletedTasks from "../todo/CompletedTasks"
+import LeftMenu from "../LeftMenu/LeftMenu"
+import NewTask from "../todo/NewTask"
+import ShowError from "../ShowError"
+import Task from "./Task"
+import DarkMode from "./DarkMode"
 
 const ToDoComponent = ({ isMobileState, darkmode }) => {
   const username = useSelector((state) => state.userReducer.username)
+  const lists = useSelector((state) => state.todoReducer.lists)
   const currentList = useSelector((state) => state.todoReducer.currentList)
-  const [closeMenu, setCloseMenu] = useState(false)
+  const [closeMenu, setCloseMenu] = useState(isMobileState ? true : false)
+
+  const filteredTodo = useMemo(() => {
+    return currentList?.todo?.filter((todo) => todo.completed === false)
+  }, [currentList])
 
   useEffect(() => {
-    isMobileState ? setCloseMenu(true) : null
-  }, [isMobileState])
+    if (isMobileState) {
+      setCloseMenu(true)
+    }
+  }, [currentList])
 
-  const handleCloseMenu = () => {
+  const handleCloseMenu = useCallback(() => {
     setCloseMenu(!closeMenu)
-  }
+  }, [closeMenu])
 
   return (
     <div className="w-screen h-screen">
@@ -32,7 +37,7 @@ const ToDoComponent = ({ isMobileState, darkmode }) => {
         <div className="md:bg-secondGrayColor md:dark:bg-secondDarkColor w-full h-full md:w-4/5 md:h-90% m-auto flex">
           {!closeMenu && (
             <div className="w-full md:w-1/6 h-full flex absolute md:static">
-              <LeftMenu closeMenu={handleCloseMenu} />
+              <LeftMenu closeMenu={handleCloseMenu} lists={lists} />
               {isMobileState && (
                 <div className="black-overlay ml-auto w-2/4 z-10 h-screen"></div>
               )}
@@ -59,7 +64,7 @@ const ToDoComponent = ({ isMobileState, darkmode }) => {
             </section>
             <NewTask />
             <div>
-              {currentList?.todo?.map(
+              {filteredTodo?.map(
                 (todo) =>
                   todo.completed === false && (
                     <Task

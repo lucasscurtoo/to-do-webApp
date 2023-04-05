@@ -5,7 +5,7 @@ import {
   useCompleteOrDecompleteTaskMutation,
   useDeleteTaskMutation,
   useUpdateTaskMutation,
-} from "../redux/api/tasks"
+} from "../../redux/api/tasks"
 
 const Task = ({ todo }) => {
   const [taskDescription, setTaskDescription] = useState(todo?.description)

@@ -15,9 +15,6 @@ export const useRedirect = () => {
       router.push("/")
       dispatch(setRedirected(true))
       dispatch(clearUserData())
-    } else if (isRedirected) {
-      dispatch(setErrorState({ state: true, message: "Log in before" }))
-      dispatch(setRedirected(false))
     }
-  }, [])
+  }, [isRedirected, isLoggedIn, username])
 }

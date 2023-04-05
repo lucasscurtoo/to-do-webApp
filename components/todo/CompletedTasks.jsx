@@ -5,7 +5,7 @@ import Task from "./Task"
 const CompletedTasks = ({ tasks, currentList }) => {
   const [openCompleted, setOpenCompleted] = useState(true)
   const completedTasks = useMemo(() => {
-    return tasks.filter((todo) => todo.completed === true)
+    return tasks?.filter((todo) => todo.completed === true)
   }, [tasks])
 
   return (
@@ -21,11 +21,11 @@ const CompletedTasks = ({ tasks, currentList }) => {
             display: "inline-block",
           }}
         />
-        <p className="pl-2 text-blueColor">{completedTasks.length}</p>
+        <p className="pl-2 text-blueColor">{completedTasks?.length}</p>
       </section>
       <div className="w-full border bg-mediumGray mt-6 mb-2"></div>
       {openCompleted &&
-        completedTasks.map((task) => (
+        completedTasks?.map((task) => (
           <Task
             key={task.description}
             todo={{
@@ -35,7 +35,7 @@ const CompletedTasks = ({ tasks, currentList }) => {
             }}
           />
         ))}
-      {!completedTasks.length && (
+      {!completedTasks?.length && (
         <p className="text-mediumGray dark:text-darkGray pt-2">
           Theres no completed tasks yet, go, complete one!
         </p>

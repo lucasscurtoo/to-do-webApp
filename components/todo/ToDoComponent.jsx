@@ -8,6 +8,7 @@ import NewTask from "../todo/NewTask"
 import ShowError from "../ShowError"
 import Task from "./Task"
 import DarkMode from "./DarkMode"
+import FetchingProgressBar from "../FetchingProgressBar"
 
 const ToDoComponent = ({ isMobileState, darkmode }) => {
   const username = useSelector((state) => state.userReducer.username)
@@ -48,7 +49,7 @@ const ToDoComponent = ({ isMobileState, darkmode }) => {
               closeMenu ? "w-95% md:w-95%" : "w-95% md:w-3/4"
             }`}
           >
-            <section className="flex items-center md:py-8 mt-6 py-4">
+            <section className="flex items-center justify-evenly md:py-8 mt-6 py-4">
               {closeMenu ? (
                 <div className="flex items-center">
                   <ChevronRightIcon
@@ -60,6 +61,9 @@ const ToDoComponent = ({ isMobileState, darkmode }) => {
               ) : (
                 <h1 className="text-mediumGray">{currentList?.title}</h1>
               )}
+              <div className="mx-auto">
+                <FetchingProgressBar />
+              </div>
               <DarkMode username={username} darkmode={darkmode} />
             </section>
             <NewTask />

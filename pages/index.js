@@ -1,15 +1,20 @@
 import { useRouter } from "next/router"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import LoginForm from "../components/auth/LoginForm"
 import { useLoginMutation } from "../redux/api/userAuth"
 import { setErrorState } from "../redux/reducers/todoSlice"
-import { useRedirect } from "../hooks/useRedirect"
+import { setRedirected } from "../redux/reducers/userSlice"
 
 const Home = () => {
+  const isRedirected = useSelector((state) => state.userReducer.isRedirected)
   const [login, { isLoading }] = useLoginMutation()
   const dispatch = useDispatch()
   const router = useRouter()
-  useRedirect()
+
+  if (isRedirected) {
+    dispatch(setErrorState({ state: true, message: "Log in before" }))
+    dispatch(setRedirected(false))
+  }
 
   const onSubmit = async (values) => {
     try {

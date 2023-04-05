@@ -10,7 +10,7 @@ const userSlice = createSlice({
     username: null,
     userToken: null,
     darkmode: false,
-    loading: true,
+    loading: false,
   },
   reducers: {
     setRedirected: (state, action) => {
@@ -31,22 +31,24 @@ const userSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addMatcher(
+        usersApi.endpoints.updateUserDarkMode.matchPending,
+        (state) => {
+          state.loading = true
+        }
+      )
+      .addMatcher(
         usersApi.endpoints.getUserDarkMode.matchFulfilled,
         (state, action) => {
-          state.loading = false
           state.darkmode = action.payload.data.darkmode
         }
       )
       .addMatcher(
         usersApi.endpoints.updateUserDarkMode.matchFulfilled,
         (state, action) => {
-          console.log(action)
           state.darkmode = action.meta.arg.originalArgs.darkmode
+          state.loading = false
         }
       )
-      .addMatcher(usersApi.endpoints.getUserDarkMode.matchPending, (state) => {
-        state.loading = true
-      })
       .addMatcher(
         isAnyOf(
           authApi.endpoints.login.matchFulfilled,

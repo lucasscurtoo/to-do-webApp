@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createSlice, isAnyOf } from "@reduxjs/toolkit"
 import { listsApi } from "../api/lists"
 import { tasksApi } from "../api/tasks"
 
@@ -14,7 +14,7 @@ const defaultList = [
 const todoSlice = createSlice({
   name: "todo",
   initialState: {
-    loading: true,
+    loading: false,
     error: null,
     lists: defaultList,
     currentList: defaultList,
@@ -34,12 +34,25 @@ const todoSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addMatcher(
+        isAnyOf(
+          listsApi.endpoints.createUserList.matchPending,
+          listsApi.endpoints.deleteUserList.matchPending,
+          listsApi.endpoints.createTask.matchPending,
+          listsApi.endpoints.updateTask.matchPending,
+          listsApi.endpoints.deleteTask.matchPending,
+          listsApi.endpoints.completeOrDecompleteTask.matchPending
+        ),
+        (state) => {
+          state.loading = true
+        }
+      )
+      .addMatcher(
         listsApi.endpoints.getUserLists.matchFulfilled,
         (state, action) => {
           const lists = action.payload.data
           if (lists != undefined) {
-            state.loading = false
             state.lists = lists
+            state.loading = false
             state.currentList = lists[0]
           }
         }
@@ -47,6 +60,7 @@ const todoSlice = createSlice({
       .addMatcher(
         listsApi.endpoints.createUserList.matchFulfilled,
         (state, action) => {
+          state.loading = false
           state.lists.push({
             title: action.meta.arg.originalArgs.title,
             todo: [],
@@ -60,6 +74,7 @@ const todoSlice = createSlice({
           const lists = JSON.parse(JSON.stringify(state.lists))
           const title = action.meta.arg.originalArgs.title
           state.lists = lists.filter((item) => item.title !== title)
+          state.loading = false
         }
       )
       .addMatcher(
@@ -73,6 +88,7 @@ const todoSlice = createSlice({
               : elem.todo
           })
           state.currentList.todo.push({ completed, description })
+          state.loading = false
         }
       )
       .addMatcher(
@@ -94,6 +110,7 @@ const todoSlice = createSlice({
           )
           state.lists[listIndex].todo = tasks
           state.currentList.todo = tasks
+          state.loading = false
         }
       )
       .addMatcher(
@@ -110,11 +127,13 @@ const todoSlice = createSlice({
           state.currentList.todo = tasks.filter(
             (item) => item.description !== description
           )
+          state.loading = false
         }
       )
       .addMatcher(
         tasksApi.endpoints.completeOrDecompleteTask.matchFulfilled,
         (state, action) => {
+          state.loading = false
           const lists = JSON.parse(JSON.stringify(state.lists))
           const { title, completed, description } = action.meta.arg.originalArgs
           const listIndex = lists.findIndex((list) => list.title === title)

@@ -1,4 +1,4 @@
-import * as Yup from "yup";
+import * as Yup from "yup"
 
 export const loginValidation = () =>
   Yup.object().shape({
@@ -8,7 +8,7 @@ export const loginValidation = () =>
     password: Yup.string()
       .min(8, "Password must be more than 8 characters")
       .required("Cannot be empty"),
-  });
+  })
 
 export const registerValidation = () =>
   Yup.object().shape({
@@ -18,8 +18,8 @@ export const registerValidation = () =>
     password: Yup.string()
       .min(8, "Password must be more than 8 characters")
       .required("Cannot be empty"),
-    confirm_password: Yup.string()
+    repeatedPassword: Yup.string()
       .min(8, "Password must be more than 8 characters")
       .required("Cannot be empty")
       .oneOf([Yup.ref("password"), null], "Passwords must match"),
-  });
+  })

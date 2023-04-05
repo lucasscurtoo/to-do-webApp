@@ -1,5 +1,6 @@
 import { MoonIcon, SunIcon } from "@heroicons/react/24/outline"
-import { useUpdateUserDarkModeMutation } from "../redux/api/users"
+import { memo } from "react"
+import { useUpdateUserDarkModeMutation } from "../../redux/api/users"
 
 const DarkMode = ({ username, darkmode }) => {
   const [updateDarkmode] = useUpdateUserDarkModeMutation()
@@ -24,4 +25,4 @@ const DarkMode = ({ username, darkmode }) => {
   )
 }
 
-export default DarkMode
+export default memo(DarkMode)

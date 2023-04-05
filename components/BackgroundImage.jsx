@@ -7,7 +7,6 @@ const BackgroundImage = () => {
       className="z-0 absolute w-screen h-screen"
       src={background}
       alt="bakground image"
-      priority
       placeholder="blur"
     />
   )

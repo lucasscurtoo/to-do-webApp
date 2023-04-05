@@ -6,7 +6,7 @@ import { useRedirect } from "../hooks/useRedirect"
 import { useIsMobile } from "../hooks/useIsMobile"
 import { useState } from "react"
 import { useEffect } from "react"
-import Loading from "../components/Loading"
+import Loading from "../components/LoadingScreen"
 import dynamic from "next/dynamic"
 
 const ToDoComponent = dynamic(() => import("../components/todo/ToDoComponent"))

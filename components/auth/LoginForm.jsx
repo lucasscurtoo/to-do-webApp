@@ -3,7 +3,7 @@ import Link from "next/link"
 import { useFormik } from "formik"
 import { loginValidation } from "../../helpers/validation"
 import { EyeSlashIcon, EyeIcon } from "@heroicons/react/24/outline"
-import { DotLoader } from "react-spinners"
+import { BarLoader } from "react-spinners"
 import BackgroundImage from "../BackgroundImage"
 import ShowError from "../ShowError"
 import InputField from "../../common/InputField"
@@ -31,12 +31,10 @@ const LoginForm = ({ onSubmit, isLoading }) => {
         className="black-overlay w-full h-full flex justify-center items-center z-10 relative"
         onSubmit={formik.handleSubmit}
       >
-        <div className="w-full lg:w-1/3 h-4/5 text-white flex flex-col">
-          <div className="w-full flex flex-col items-center">
-            <h1 className="text-5xl">Welcome</h1>
-            <p className="text-gray-400">Login to your account</p>
-          </div>
-          <div className="w-full flex flex-col items-center mt-20 space-y-4">
+        <div className="w-1/2 h-4/5 text-white flex flex-col items-center">
+          <div className="w-1/3 flex flex-col items-center">
+            <h1 className="text-6xl">Welcome</h1>
+            <p className="text-xl text-gray-400 mb-10">Login to your account</p>
             <InputField
               label="Username"
               placeholder="Username"
@@ -69,12 +67,12 @@ const LoginForm = ({ onSubmit, isLoading }) => {
                 !showPassword ? (
                   <EyeSlashIcon
                     onClick={() => setShowPassword(!showPassword)}
-                    className="w-6 ml-auto mr-2 text-black"
+                    className="w-6 ml-auto mr-2 text-black cursor-pointer"
                   />
                 ) : (
                   <EyeIcon
                     onClick={() => setShowPassword(!showPassword)}
-                    className="w-6 ml-auto mr-2 text-black"
+                    className="w-6 ml-auto mr-2 text-black cursor-pointer"
                   />
                 )
               }
@@ -82,16 +80,22 @@ const LoginForm = ({ onSubmit, isLoading }) => {
           </div>
 
           <div className="w-full flex flex-col items-center mt-36">
-            <button className="w-64 py-3 rounded-md bg-blueColor" type="submit">
+            <button
+              className="w-64 py-3 rounded-md bg-blueColor hover:bg-blue-400"
+              type="submit"
+            >
               Log in
             </button>
-            <section className="flex">
+            <section className="flex my-2">
               <p className="text-darkGray text-sm mr-6">Don’t have account?</p>
-              <Link className="text-sm " href="/register">
+              <Link
+                className="text-sm text-gray-300 hover:text-white"
+                href="/register"
+              >
                 Create Now
               </Link>
             </section>
-            <DotLoader color="#1876f2" loading={isLoading} size={30} />
+            <BarLoader color="#00d7ee" loading={isLoading} width={200} />
           </div>
         </div>
       </form>

@@ -1,39 +1,26 @@
 import { useRef } from "react"
 import { PlusIcon } from "@heroicons/react/24/outline"
-import { useDispatch, useSelector } from "react-redux"
-import { useCreateTaskMutation } from "../../redux/api/tasks"
+import { useSelector } from "react-redux"
+import useManageTasks from "../../hooks/useManageTasks"
 
 const NewTask = () => {
   const currentList = useSelector((state) => state.todoReducer.currentList)
-  const { username } = useSelector((state) => state.userReducer)
-  const [createNewTask] = useCreateTaskMutation()
-  const dispatch = useDispatch()
+  const { handleCreateTask } = useManageTasks()
   const newTask = useRef(null)
 
   const handleNewTask = () => {
-    const newTaskValue = newTask.current.value
+    const newTaskValue = newTask.current?.value
     newTask.current.value = ""
     newTask.current.blur()
 
     if (newTaskValue != "") {
-      if (!currentList.todo.some((elem) => elem.description === newTaskValue)) {
-        createNewTask({
-          title: currentList.title,
-          completed: false,
-          description: newTaskValue,
-          username,
-        })
-      } else {
-        dispatch(
-          setErrorState({ state: true, message: "This task already exists" })
-        )
-      }
+      handleCreateTask(currentList, newTaskValue)
     }
   }
 
   const newTaskHandleKeyDown = (event) => {
     if (event.key === "Enter") {
-      handleNewTask(newTask.current.value)
+      handleNewTask()
     }
   }
 

@@ -1,56 +1,20 @@
 import { TrashIcon } from "@heroicons/react/24/outline"
 import { useState } from "react"
-import { useSelector } from "react-redux"
-import {
-  useCompleteOrDecompleteTaskMutation,
-  useDeleteTaskMutation,
-  useUpdateTaskMutation,
-} from "../../redux/api/tasks"
+import useManageTasks from "../../hooks/useManageTasks"
 
 const Task = ({ todo }) => {
   const [taskDescription, setTaskDescription] = useState(todo?.description)
-  const [updateTask] = useUpdateTaskMutation()
-  const [deleteTask] = useDeleteTaskMutation()
-  const [completeOrDecompleteTask] = useCompleteOrDecompleteTaskMutation()
-  const { username } = useSelector((state) => state.userReducer)
+  const { handleDeleteTask, handleOnCheck, handleTaskChange } =
+    useManageTasks(todo)
+
+  const handleTaskDescription = (event) => {
+    setTaskDescription(event.target.value)
+  }
 
   const handleEnter = (event) => {
     if (event.key === "Enter") {
       handleTaskChange()
     }
-  }
-
-  const handleTaskChange = () => {
-    if (todo.description != taskDescription) {
-      updateTask({
-        title: todo.title,
-        completed: todo.completed,
-        description: todo.description,
-        newDescription: taskDescription,
-        username,
-      })
-    }
-  }
-  const handleOnCheck = () => {
-    completeOrDecompleteTask({
-      title: todo.title,
-      completed: todo.completed,
-      description: todo.description,
-      username,
-    })
-  }
-
-  const handleDeleteTask = () => {
-    deleteTask({
-      title: todo.title,
-      completed: todo.completed,
-      description: todo.description,
-      username,
-    })
-  }
-
-  const handleTaskDescription = (event) => {
-    setTaskDescription(event.target.value)
   }
 
   return (

@@ -4,7 +4,7 @@ import Image from "next/image"
 import { BarLoader } from "react-spinners"
 import { memo } from "react"
 
-const Loading = () => {
+const LoadingScreen = () => {
   return (
     <div className="w-screen h-screen">
       <BackgroundImage />
@@ -17,4 +17,4 @@ const Loading = () => {
   )
 }
 
-export default memo(Loading)
+export default memo(LoadingScreen)

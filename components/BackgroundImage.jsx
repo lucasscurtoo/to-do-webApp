@@ -8,6 +8,7 @@ const BackgroundImage = () => {
       src={background}
       alt="bakground image"
       placeholder="blur"
+      priority
     />
   )
 }

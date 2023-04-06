@@ -62,7 +62,7 @@ const ToDoComponent = ({ isMobileState, darkmode }) => {
                 <h1 className="text-mediumGray">{currentList?.title}</h1>
               )}
               <div className="mx-auto">
-                <FetchingProgressBar />
+                <FetchingProgressBar width="100vw" />
               </div>
               <DarkMode username={username} darkmode={darkmode} />
             </section>

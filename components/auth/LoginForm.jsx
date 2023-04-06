@@ -31,9 +31,9 @@ const LoginForm = ({ onSubmit, isLoading }) => {
         className="black-overlay w-full h-full flex justify-center items-center z-10 relative"
         onSubmit={formik.handleSubmit}
       >
-        <div className="w-full md:1/2 h-4/5 text-white flex flex-col items-center">
-          <div className="sm:w-1/3 md:h-1/2 flex flex-col items-center">
-            <h1 className="text-6xl">Welcome</h1>
+        <div className="w-full sm:1/3 h-4/5 text-white flex flex-col items-center">
+          <div className="w-4/5 sm:w-1/2 md:w-1/3 lg:w-1/5 flex flex-col items-center">
+            <h1 className="text-5xl sm:text-6xl">Welcome</h1>
             <p className="text-xl text-gray-400 mb-10">Login to your account</p>
             <InputField
               label="Username"

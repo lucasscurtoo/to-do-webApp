@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import { PropagateLoader } from "react-spinners"
 
-const FetchingProgressBar = () => {
+const FetchingProgressBar = ({ width }) => {
   const loadingUserSlice = useSelector((state) => state.userReducer.loading)
   const loadingTodoSlice = useSelector((state) => state.todoReducer.loading)
   const [loading, setLoading] = useState(false)
@@ -16,7 +16,6 @@ const FetchingProgressBar = () => {
       <PropagateLoader
         color="#00d7ee"
         cssOverride={{
-          width: "100vw",
           position: "absolute",
           zIndex: "100",
         }}

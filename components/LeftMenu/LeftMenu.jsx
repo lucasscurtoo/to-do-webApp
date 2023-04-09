@@ -20,7 +20,7 @@ const LeftMenu = ({ closeMenu, lists }) => {
   }
 
   return (
-    <div className="bg-white dark:bg-primaryDarkColor w-2/4 md:w-full h-screen md:h-full shadow-lg absolute z-10 md:static">
+    <div className="bg-white dark:bg-primaryDarkColor w-2/4 md:w-full h-screen md:h-full shadow-lg absolute z-50 md:static">
       <div className="py-6 px-4 h-full flex flex-col menuLeftCounters">
         <section
           onClick={closeMenu}
@@ -38,6 +38,7 @@ const LeftMenu = ({ closeMenu, lists }) => {
               currentList={currentList}
               list={list}
               darkmode={darkmode}
+              onClose={closeMenu}
             />
           ))}
           <section className="flex mt-8">

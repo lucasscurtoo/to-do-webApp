@@ -1,33 +1,24 @@
-import { useState } from "react"
-import { ControlledMenu, MenuItem, useMenuState } from "@szhsin/react-menu"
+import { ControlledMenu, MenuItem } from "@szhsin/react-menu"
 import { TrashIcon, PencilSquareIcon } from "@heroicons/react/24/outline"
 
-const OptionsMenu = ({ listTitle, editList }) => {
-  const [menuProps, toggleMenu] = useMenuState()
-  const [anchorPoint, setAnchorPoint] = useState({ x: 0, y: 0 })
-
-  const handleDeleteList = () => {
-    deleteUserList({ title: listTitle, username })
-  }
-
+const OptionsMenu = ({
+  onDelete,
+  onRename,
+  anchorPoint,
+  menuProps,
+  toggleMenu,
+}) => {
   return (
-    <div
-      onContextMenu={(e) => {
-        e.preventDefault()
-        setAnchorPoint({ x: e.clientX, y: e.clientY })
-        toggleMenu(true)
-      }}
-      className="w-32 h-12 absolute z-10"
-    >
+    <div className="w-full">
       <ControlledMenu
         {...menuProps}
         anchorPoint={anchorPoint}
-        direction="right"
+        direction="top"
         onClose={() => toggleMenu(false)}
-        menuClassName="bg-white dark:bg-secondDarkGray p-2 flex flex-col justify-center group-hover:text-white "
+        menuClassName="bg-white dark:bg-secondDarkGray px-2 group-hover:text-white z-10"
       >
         <div
-          onClick={handleDeleteList}
+          onClick={onDelete}
           className="parentHoverRed flex items-center my-2"
         >
           <TrashIcon className="w-6 text-errorColor dark:text-softErrorColor childHover" />
@@ -35,9 +26,9 @@ const OptionsMenu = ({ listTitle, editList }) => {
             Delete
           </MenuItem>
         </div>
-        <div className="flex items-center group my-2">
-          <PencilSquareIcon className="w-6 group-hover:text-gray-300" />
-          <MenuItem className="hover:outline-none focus:outline-none group-hover:text-gray-300">
+        <div onClick={onRename} className="flex items-center group my-2">
+          <PencilSquareIcon className="w-6 text-gray-300 group-hover:text-white" />
+          <MenuItem className="hover:outline-none text-gray-300 focus:outline-none group-hover:text-white">
             Rename
           </MenuItem>
         </div>

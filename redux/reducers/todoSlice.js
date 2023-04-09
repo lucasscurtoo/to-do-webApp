@@ -36,6 +36,7 @@ const todoSlice = createSlice({
       .addMatcher(
         isAnyOf(
           listsApi.endpoints.createUserList.matchPending,
+          listsApi.endpoints.editUserList.matchPending,
           listsApi.endpoints.deleteUserList.matchPending,
           listsApi.endpoints.createTask.matchPending,
           listsApi.endpoints.updateTask.matchPending,
@@ -68,6 +69,21 @@ const todoSlice = createSlice({
           })
         }
       )
+      .addMatcher(
+        listsApi.endpoints.editUserList.matchFulfilled,
+        (state, action) => {
+          const lists = JSON.parse(JSON.stringify(state.lists))
+          console.log(action)
+          const { oldTitle, newTitle } = action.meta.arg.originalArgs
+          lists.map((elem, index) => {
+            elem.title === oldTitle
+              ? (state.lists[index].title = newTitle)
+              : elem
+          })
+          state.loading = false
+        }
+      )
+
       .addMatcher(
         listsApi.endpoints.deleteUserList.matchFulfilled,
         (state, action) => {

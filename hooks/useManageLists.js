@@ -3,14 +3,16 @@ import { checkIfExists } from "../helpers/functions"
 import {
   useCreateUserListMutation,
   useDeleteUserListMutation,
+  useEditUserListMutation,
 } from "../redux/api/lists"
-import { selectAList } from "../redux/reducers/todoSlice"
+import { selectAList, setErrorState } from "../redux/reducers/todoSlice"
 
 const useListManagement = () => {
   const lists = useSelector((state) => state.todoReducer.lists)
   const username = useSelector((state) => state.userReducer.username)
   const [createUserList] = useCreateUserListMutation()
   const [deleteUserList] = useDeleteUserListMutation()
+  const [editUserList] = useEditUserListMutation()
   const dispatch = useDispatch()
 
   const createNewList = (listName) => {
@@ -21,6 +23,19 @@ const useListManagement = () => {
       )
     } else {
       createUserList({ title: listName, username })
+    }
+  }
+
+  const handleEditUserList = (listName, newListName) => {
+    if (listName != newListName) {
+      editUserList({ oldTitle: listName, newTitle: newListName, username })
+    } else {
+      dispatch(
+        setErrorState({
+          state: true,
+          message: "Can'not set the same list name, please provide another one",
+        })
+      )
     }
   }
 
@@ -37,6 +52,7 @@ const useListManagement = () => {
     createNewList,
     handleDeleteList,
     handleSelectAList,
+    handleEditUserList,
   }
 }
 

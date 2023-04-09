@@ -13,9 +13,9 @@ const ToDoComponent = dynamic(() => import("../components/todo/ToDoComponent"))
 
 const ToDo = () => {
   const [loading, setLoading] = useState(true)
+  const darkmode = useSelector((state) => state.userReducer.darkmode)
   const username = useSelector((state) => state.userReducer.username)
-  const { isSuccess: darkmodeCompleted, data: darkmode } =
-    useGetUserDarkModeQuery(username)
+  const { isSuccess: darkmodeCompleted } = useGetUserDarkModeQuery(username)
   const { isSuccess: listsCompleted } = useGetUserListsQuery(username)
   const { isMobileState } = useIsMobile()
   setNextTheme(darkmode)

@@ -26,9 +26,9 @@ const ToDoComponent = ({ isMobileState, darkmode }) => {
     }
   }, [currentList])
 
-  const handleCloseMenu = useCallback(() => {
+  const handleCloseMenu = () => {
     setCloseMenu(!closeMenu)
-  }, [closeMenu])
+  }
 
   return (
     <div className="w-screen h-screen">
@@ -45,7 +45,7 @@ const ToDoComponent = ({ isMobileState, darkmode }) => {
             </div>
           )}
           <div
-            className={`h-full flex flex-col mx-auto overflow-y-scroll ${
+            className={`h-full flex flex-col mx-auto ${
               closeMenu ? "w-95% md:w-95%" : "w-95% md:w-3/4"
             }`}
           >
@@ -66,26 +66,28 @@ const ToDoComponent = ({ isMobileState, darkmode }) => {
               </div>
               <DarkMode username={username} darkmode={darkmode} />
             </section>
-            <NewTask />
-            <div>
-              {filteredTodo?.map(
-                (todo) =>
-                  todo.completed === false && (
-                    <Task
-                      todo={{
-                        title: currentList.title,
-                        completed: todo.completed,
-                        description: todo.description,
-                      }}
-                      key={todo.description}
-                    />
-                  )
-              )}
+            <div className="w-full h-full overflow-y-scroll">
+              <NewTask />
+              <div>
+                {filteredTodo?.map(
+                  (todo) =>
+                    todo.completed === false && (
+                      <Task
+                        todo={{
+                          title: currentList.title,
+                          completed: todo.completed,
+                          description: todo.description,
+                        }}
+                        key={todo.description}
+                      />
+                    )
+                )}
+              </div>
+              <CompletedTasks
+                tasks={currentList?.todo}
+                currentList={currentList}
+              />
             </div>
-            <CompletedTasks
-              tasks={currentList?.todo}
-              currentList={currentList}
-            />
           </div>
         </div>
       </div>

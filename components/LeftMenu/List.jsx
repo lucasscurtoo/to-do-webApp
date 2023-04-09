@@ -70,7 +70,9 @@ const List = ({ currentList, list, darkmode, onClose }) => {
       />
       <input
         className={`w-3/4 truncate bg-transparent  ${
-          isSelected ? "placeholder:text-white" : "placeholder:text-mediumGray"
+          isSelected
+            ? "placeholder:text-black dark:placeholder:text-white"
+            : "placeholder:text-mediumGray"
         }`}
         ref={inputRef}
         placeholder={list.title}

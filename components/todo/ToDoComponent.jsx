@@ -37,7 +37,7 @@ const ToDoComponent = ({ isMobileState, darkmode }) => {
       <div className="black-overlay w-full h-full flex z-10 relative">
         <div className="md:bg-secondGrayColor md:dark:bg-secondDarkColor w-full h-full md:w-4/5 md:h-90% m-auto flex">
           {!closeMenu && (
-            <div className="w-full md:w-1/3 h-full flex absolute md:static">
+            <div className="w-full md:w-1/3 lg:w-1/6 h-full flex absolute md:static">
               <LeftMenu closeMenu={handleCloseMenu} lists={lists} />
               {isMobileState && (
                 <div className="black-overlay ml-auto w-2/4 z-10 h-screen"></div>

@@ -73,7 +73,6 @@ const todoSlice = createSlice({
         listsApi.endpoints.editUserList.matchFulfilled,
         (state, action) => {
           const lists = JSON.parse(JSON.stringify(state.lists))
-          console.log(action)
           const { oldTitle, newTitle } = action.meta.arg.originalArgs
           lists.map((elem, index) => {
             elem.title === oldTitle

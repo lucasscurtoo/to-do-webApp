@@ -1,20 +1,11 @@
-import { ControlledMenu, MenuItem } from "@szhsin/react-menu"
+import { ControlledMenu, Menu, MenuItem } from "@szhsin/react-menu"
 import { TrashIcon, PencilSquareIcon } from "@heroicons/react/24/outline"
 
-const OptionsMenu = ({
-  onDelete,
-  onRename,
-  anchorPoint,
-  menuProps,
-  toggleMenu,
-}) => {
+const OptionsMenu = ({ onDelete, onRename, toggleMenu, children }) => {
   return (
     <div className="w-full">
-      <ControlledMenu
-        {...menuProps}
-        anchorPoint={anchorPoint}
-        direction="top"
-        onClose={() => toggleMenu(false)}
+      <Menu
+        menuButton={children}
         menuClassName="bg-white dark:bg-secondDarkGray px-2 group-hover:text-white z-10"
       >
         <div
@@ -32,7 +23,7 @@ const OptionsMenu = ({
             Rename
           </MenuItem>
         </div>
-      </ControlledMenu>
+      </Menu>
     </div>
   )
 }

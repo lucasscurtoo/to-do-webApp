@@ -69,7 +69,7 @@ const List = ({ currentList, list, darkmode, onClose }) => {
         className="mr-2 md:min-w-max"
       />
       <input
-        className={`w-90% truncate bg-transparent  ${
+        className={`w-3/4 truncate bg-transparent  ${
           isSelected ? "placeholder:text-white" : "placeholder:text-mediumGray"
         }`}
         ref={inputRef}

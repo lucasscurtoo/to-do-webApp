@@ -1,7 +1,5 @@
-import { memo, useState } from "react"
+import { memo } from "react"
 import OptionsMenu from "./OptionsMenu"
-import { useMenuState } from "@szhsin/react-menu"
-import { useIsMobile } from "../../hooks/useIsMobile"
 import { EllipsisHorizontalIcon } from "@heroicons/react/24/outline"
 
 const ListItem = ({ isSelected, children, onClick, onDelete, onRename }) => {

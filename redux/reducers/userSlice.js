@@ -11,11 +11,19 @@ const userSlice = createSlice({
     userToken: null,
     darkmode: false,
     loading: false,
+    jwtExpired: false,
   },
   reducers: {
     setRedirected: (state, action) => {
       state.isRedirected = action.payload
       state.error = { state: true, message: "Log in before" }
+    },
+    setJwtExpired: (state, action) => {
+      state.jwtExpired = action.payload
+      state.error = {
+        state: true,
+        message: "Your session expired, please log in again",
+      }
     },
     clearUserData: (state) => {
       state.username = null
@@ -26,6 +34,11 @@ const userSlice = createSlice({
     },
     logOut: (state) => {
       state.isLoggedIn = false
+    },
+    setUserData: (state, action) => {
+      state.isLoggedIn = true
+      state.username = action.payload.username
+      state.userToken = action.payload.userToken
     },
   },
   extraReducers: (builder) => {
@@ -75,5 +88,11 @@ const userSlice = createSlice({
   },
 })
 
-export const { setRedirected, clearUserData, logOut } = userSlice.actions
+export const {
+  setRedirected,
+  setJwtExpired,
+  clearUserData,
+  logOut,
+  setUserData,
+} = userSlice.actions
 export default userSlice.reducer

@@ -1,3 +1,9 @@
+import {
+  clearUserData,
+  logOut,
+  setJwtExpired,
+} from "../redux/reducers/userSlice"
+
 export const checkIfExists = (data, item, itemToSearch) => {
   if (data === undefined) {
     return false
@@ -15,3 +21,15 @@ export const checkIfChanged = (prevValue, newValue) => {
     return true
   }
 }
+
+export const tokenErrorHandler =
+  ({ dispatch }) =>
+  (next) =>
+  (action) => {
+    if (action.payload && action.payload.status === 401) {
+      dispatch(setJwtExpired(true))
+      dispatch(logOut())
+      dispatch(clearUserData())
+    }
+    return next(action)
+  }

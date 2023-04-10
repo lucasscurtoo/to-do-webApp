@@ -9,7 +9,7 @@ const LoadingScreen = () => {
     <div className="w-screen h-screen">
       <BackgroundImage />
       <div className="black-overlay z-10 w-full h-full flex flex-col items-center justify-center relative">
-        <Image className="w-40" src={LogoToDo} alt="Logo" />
+        <Image className="w-40" src={LogoToDo} alt="Logo" priority />
         <BarLoader color="#00d7ee" width={200} />
         <p className="text-grayColor">We are loading your data, please wait</p>
       </div>

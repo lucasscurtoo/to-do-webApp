@@ -35,7 +35,7 @@ const RegisterForm = ({ onSubmit, isLoading }) => {
       >
         <div className="w-full sm:1/3 h-4/5 text-white flex flex-col items-center">
           <div className="w-4/5 sm:w-1/2 md:w-1/3 lg:w-1/5 flex flex-col items-center">
-            <h1 className="text-5xl sm:text-6xl">Welcome</h1>
+            <h1 className="text-5xl sm:text-7xl">Welcome</h1>
             <p className="text-xl text-gray-400 mb-10">Login to your account</p>
             <InputField
               label="Username"
@@ -69,12 +69,12 @@ const RegisterForm = ({ onSubmit, isLoading }) => {
                 !showPassword ? (
                   <EyeSlashIcon
                     onClick={() => setShowPassword(!showPassword)}
-                    className="w-6 ml-auto mr-2 text-black cursor-pointer"
+                    className="w-8 ml-auto mr-2 text-black cursor-pointer"
                   />
                 ) : (
                   <EyeIcon
                     onClick={() => setShowPassword(!showPassword)}
-                    className="w-6 ml-auto mr-2 text-black cursor-pointer"
+                    className="w-8 ml-auto mr-2 text-black cursor-pointer"
                   />
                 )
               }
@@ -100,14 +100,14 @@ const RegisterForm = ({ onSubmit, isLoading }) => {
                     onClick={() =>
                       setShowRepeatedPassword(!showRepeatedPassword)
                     }
-                    className="w-6 ml-auto mr-2 text-black cursor-pointer"
+                    className="w-8 ml-auto mr-2 text-black cursor-pointer"
                   />
                 ) : (
                   <EyeIcon
                     onClick={() =>
                       setShowRepeatedPassword(!showRepeatedPassword)
                     }
-                    className="w-6 ml-auto mr-2 text-black cursor-pointer"
+                    className="w-8 ml-auto mr-2 text-black cursor-pointer"
                   />
                 )
               }
@@ -115,14 +115,17 @@ const RegisterForm = ({ onSubmit, isLoading }) => {
           </div>
 
           <div className="w-full flex flex-col items-center mt-36">
-            <button className="w-64 py-3 rounded-md bg-blueColor hover:bg-blue-400">
+            <button className="w-64 py-3 rounded-md text-lg md:text-md bg-blueColor hover:bg-blue-400">
               Register
             </button>
             <section className="flex my-2">
-              <p className="text-darkGray text-sm mr-6">
+              <p className="text-darkGray text-lg md:text-md mr-6">
                 Already have account?
               </p>
-              <Link className="text-sm text-gray-300 hover:text-white" href="/">
+              <Link
+                className="text-lg md:text-md text-gray-300 hover:text-white"
+                href="/"
+              >
                 Login
               </Link>
             </section>

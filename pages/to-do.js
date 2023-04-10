@@ -2,7 +2,7 @@ import { useSelector } from "react-redux"
 import { useGetUserDarkModeQuery } from "../redux/api/users"
 import { useGetUserListsQuery } from "../redux/api/lists"
 import { setNextTheme } from "../hooks/setNextTheme"
-import { useSession } from "../hooks/useSession"
+import { useRedirect } from "../hooks/useRedirect"
 import { useIsMobile } from "../hooks/useIsMobile"
 import { useState } from "react"
 import { useEffect } from "react"
@@ -24,7 +24,7 @@ const ToDo = () => {
   })
   const { isMobileState } = useIsMobile()
   setNextTheme(darkmode)
-  useSession()
+  useRedirect()
 
   useEffect(() => {
     darkmodeCompleted && listsCompleted && setLoading(false)

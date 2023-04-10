@@ -160,6 +160,22 @@ const todoSlice = createSlice({
           )
         }
       )
+      .addMatcher(
+        isAnyOf(
+          listsApi.endpoints.createUserList.matchRejected,
+          listsApi.endpoints.editUserList.matchRejected,
+          listsApi.endpoints.deleteUserList.matchRejected,
+          listsApi.endpoints.createTask.matchRejected,
+          listsApi.endpoints.updateTask.matchRejected,
+          listsApi.endpoints.deleteTask.matchRejected,
+          listsApi.endpoints.completeOrDecompleteTask.matchRejected
+        ),
+        (state, action) => {
+          console.log(action)
+          state.error = { state: true, message: action?.payload?.data?.message }
+          state.loading = false
+        }
+      )
   },
 })
 

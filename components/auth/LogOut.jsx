@@ -9,9 +9,9 @@ const LogOut = () => {
   const router = useRouter()
 
   const handleLogOut = async () => {
+    router.push("/")
     dispatch(logOut())
     dispatch(clearUserData())
-    router.push("/")
   }
 
   return (

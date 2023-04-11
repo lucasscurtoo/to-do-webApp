@@ -16,7 +16,6 @@ const ToDo = () => {
   const [loading, setLoading] = useState(true)
   const darkmode = useSelector((state) => state.userReducer.darkmode)
   const username = useSelector((state) => state.userReducer.username)
-  const isLoggedIn = useSelector((state) => state.userReducer.isLoggedIn)
   const { isSuccess: darkmodeCompleted } = useGetUserDarkModeQuery(username, {
     skip: !username,
   })

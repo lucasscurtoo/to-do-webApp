@@ -25,14 +25,14 @@ const NewTask = () => {
   }
 
   return (
-    <div className="w-full h-16 md:h-20 bg-white dark:bg-thirdDarkColor mx-auto shadow-md mb-4">
-      <div className="w-full h-16 md:h-20 flex items-center">
-        <PlusIcon className="w-8 ml-4 text-blueColor" />
+    <div className="w-full h-16 md:h-20 bg-white dark:bg-thirdDarkColor mx-auto shadow-md mb-4 rounded-md">
+      <div className="w-full h-16 md:h-20 flex items-center group">
+        <PlusIcon className="w-8 ml-4 text-blueColor group-hover:text-sky-700 " />
         <input
-          className="ml-2 w-full pr-2 bg-transparent placeholder:text-blueColor font-thin placeholders"
+          className="ml-2 w-full pr-2 bg-transparent placeholder:text-blueColor group-hover:placeholder:text-sky-700 font-thin placeholders"
           onKeyDown={newTaskHandleKeyDown}
           ref={newTask}
-          placeholder="Add a task"
+          placeholder="Write to start adding a task..."
         />
         <button
           className="ml-auto mr-8 text-mediumGray py-1 px-5 border-2 border-blueColor text-xs rounded-sm hover:bg-blueColor hover:text-white"

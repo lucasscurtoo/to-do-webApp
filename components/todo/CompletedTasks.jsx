@@ -10,10 +10,10 @@ const CompletedTasks = ({ tasks, currentList }) => {
 
   return (
     <div className="w-full mt-4">
-      <section className="flex">
-        <h2 className="text-blueColor">Completed</h2>
+      <section className="flex group">
+        <h2 className="text-blueColor group-hover:text-sky-700">Completed</h2>
         <ChevronUpIcon
-          className="w-6 ml-2 text-blueColor transition-all	"
+          className="w-6 ml-2 text-blueColor group-hover:text-sky-700 transition-all	"
           onClick={() => setOpenCompleted(!openCompleted)}
           style={{
             transition: "transform 200ms linear",
@@ -21,10 +21,12 @@ const CompletedTasks = ({ tasks, currentList }) => {
             display: "inline-block",
           }}
         />
-        <p className="pl-2 text-blueColor">{completedTasks?.length}</p>
+        <p className="pl-2 text-blueColor group-hover:text-sky-700">
+          {completedTasks?.length}
+        </p>
       </section>
       <div className="w-full border bg-mediumGray mt-6 mb-2"></div>
-      {openCompleted &&
+      {openCompleted ? (
         completedTasks?.map((task) => (
           <Task
             key={task.description}
@@ -34,9 +36,14 @@ const CompletedTasks = ({ tasks, currentList }) => {
               description: task.description,
             }}
           />
-        ))}
-      {!completedTasks?.length && (
+        ))
+      ) : (
         <p className="text-mediumGray dark:text-darkGray pt-2">
+          Open your completed tasks up!
+        </p>
+      )}
+      {!completedTasks?.length && (
+        <p className="text-mediumGray dark:text-darkGray pt-2 ">
           Theres no completed tasks yet, go, complete one!
         </p>
       )}

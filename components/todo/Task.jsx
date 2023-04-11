@@ -18,7 +18,7 @@ const Task = ({ todo }) => {
   }
 
   return (
-    <div className="w-full h-16 md:h-20 md:min-h-20 bg-white dark:bg-thirdDarkColor mx-auto shadow-md mb-4">
+    <div className="w-full h-16 md:h-20 md:min-h-20 bg-white dark:bg-thirdDarkColor mx-auto shadow-md mb-4 rounded-md">
       <div className="w-full h-full flex items-center ">
         <label className="checkboxRound-contain ml-4 flex items-center h-7">
           {todo.completed ? (
@@ -30,7 +30,7 @@ const Task = ({ todo }) => {
         </label>
         <input
           type="text"
-          className="ml-4 w-full pr-2 bg-transparent dark:text-white dark:hover:text-mediumGray dark:focus:text-mediumGray text-mediumGray hover:text-black focus:text-black"
+          className="ml-4 w-full pr-2 bg-transparent placeholder:select-none dark:text-white dark:hover:text-mediumGray dark:focus:text-mediumGray text-mediumGray hover:text-black focus:text-black"
           placeholder={todo.description}
           value={taskDescription}
           onChange={handleTaskDescription}
@@ -38,7 +38,7 @@ const Task = ({ todo }) => {
           onBlur={handleTaskChange}
         />
         <TrashIcon
-          className="w-8 md:w-6 mr-8 text-errorColor hover:text-intenseErrorColor dark:text-softErrorColor dark:hover:text-errorColor"
+          className="w-8 md:w-6 mr-8 text-errorColor cursor-pointer hover:text-amber-900 dark:text-softErrorColor dark:hover:text-errorColor"
           onClick={handleDeleteTask}
         />
       </div>

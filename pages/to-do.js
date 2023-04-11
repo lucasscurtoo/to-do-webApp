@@ -8,6 +8,7 @@ import { useState } from "react"
 import { useEffect } from "react"
 import Loading from "../components/LoadingScreen"
 import dynamic from "next/dynamic"
+import Head from "next/head"
 
 const ToDoComponent = dynamic(() => import("../components/todo/ToDoComponent"))
 
@@ -32,11 +33,18 @@ const ToDo = () => {
 
   return (
     <>
-      {loading ? (
-        <Loading />
-      ) : (
-        <ToDoComponent isMobileState={isMobileState} darkmode={darkmode} />
-      )}
+      <div>
+        <Head>
+          <title>To-Do List</title>
+          <meta name="description" content="My personal to-do project" />
+          <meta name="keywords" content="nextjs, react, web development" />
+        </Head>
+        {loading ? (
+          <Loading />
+        ) : (
+          <ToDoComponent isMobileState={isMobileState} darkmode={darkmode} />
+        )}
+      </div>
     </>
   )
 }

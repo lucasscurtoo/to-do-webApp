@@ -85,6 +85,18 @@ const userSlice = createSlice({
           }
         }
       )
+      .addMatcher(
+        isAnyOf(
+          authApi.endpoints.login.matchRejected,
+          authApi.endpoints.register.matchRejected,
+          authApi.endpoints.updateUserDarkMode.matchRejected,
+          authApi.endpoints.getUserDarkMode.matchRejected
+        ),
+        (state, action) => {
+          state.error = { state: true, message: action?.payload?.data?.message }
+          state.loading = false
+        }
+      )
   },
 })
 

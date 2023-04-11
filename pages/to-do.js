@@ -2,12 +2,13 @@ import { useSelector } from "react-redux"
 import { useGetUserDarkModeQuery } from "../redux/api/users"
 import { useGetUserListsQuery } from "../redux/api/lists"
 import { setNextTheme } from "../hooks/setNextTheme"
-import { useSession } from "../hooks/useSession"
+import { useRedirect } from "../hooks/useRedirect"
 import { useIsMobile } from "../hooks/useIsMobile"
 import { useState } from "react"
 import { useEffect } from "react"
 import Loading from "../components/LoadingScreen"
 import dynamic from "next/dynamic"
+import Head from "next/head"
 
 const ToDoComponent = dynamic(() => import("../components/todo/ToDoComponent"))
 
@@ -24,7 +25,7 @@ const ToDo = () => {
   })
   const { isMobileState } = useIsMobile()
   setNextTheme(darkmode)
-  useSession()
+  useRedirect()
 
   useEffect(() => {
     darkmodeCompleted && listsCompleted && setLoading(false)
@@ -32,11 +33,18 @@ const ToDo = () => {
 
   return (
     <>
-      {loading ? (
-        <Loading />
-      ) : (
-        <ToDoComponent isMobileState={isMobileState} darkmode={darkmode} />
-      )}
+      <div>
+        <Head>
+          <title>To-Do List</title>
+          <meta name="description" content="My personal to-do project" />
+          <meta name="keywords" content="nextjs, react, web development" />
+        </Head>
+        {loading ? (
+          <Loading />
+        ) : (
+          <ToDoComponent isMobileState={isMobileState} darkmode={darkmode} />
+        )}
+      </div>
     </>
   )
 }

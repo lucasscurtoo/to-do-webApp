@@ -3,14 +3,12 @@ import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import {
   clearUserData,
-  logOut,
   setRedirected,
   setUserData,
 } from "../redux/reducers/userSlice"
-import { middleware } from "../redux/api/api"
 
-export const useSession = () => {
-  const { username, isLoggedIn, isRedirected } = useSelector(
+export const useRedirect = () => {
+  const { username, isLoggedIn, jwtExpired } = useSelector(
     (state) => state.userReducer
   )
   const dispatch = useDispatch()
@@ -27,5 +25,12 @@ export const useSession = () => {
     if (token && username === null) {
       dispatch(setUserData({ username: storageUsername, userToken: token }))
     }
-  }, [isRedirected, isLoggedIn, username])
+  }, [])
+
+  useEffect(() => {
+    if (jwtExpired) {
+      router.push("/")
+      dispatch(clearUserData())
+    }
+  }, [jwtExpired])
 }

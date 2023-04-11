@@ -1,3 +1,4 @@
+import Head from "next/head"
 import { useRouter } from "next/router"
 import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
@@ -37,7 +38,17 @@ const Home = () => {
       dispatch(setErrorState({ state: true, message: error?.data?.message }))
     }
   }
-  return <LoginForm onSubmit={onSubmit} isLoading={isLoading} />
+
+  return (
+    <div>
+      <Head>
+        <title>To-Do List</title>
+        <meta name="description" content="My personal to-do project" />
+        <meta name="keywords" content="nextjs, react, web development" />
+      </Head>
+      <LoginForm onSubmit={onSubmit} isLoading={isLoading} />
+    </div>
+  )
 }
 
 export default Home

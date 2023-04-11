@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux"
 import { useRegisterMutation } from "../redux/api/userAuth"
 import { setErrorState } from "../redux/reducers/todoSlice"
 import RegisterForm from "../components/auth/RegisterForm"
+import Head from "next/head"
 
 const Register = () => {
   const [register, { isLoading }] = useRegisterMutation()
@@ -19,7 +20,16 @@ const Register = () => {
     }
   }
 
-  return <RegisterForm onSubmit={onSubmit} isLoading={isLoading} />
+  return (
+    <div>
+      <Head>
+        <title>To-Do List</title>
+        <meta name="description" content="My personal to-do project" />
+        <meta name="keywords" content="nextjs, react, web development" />
+      </Head>
+      <RegisterForm onSubmit={onSubmit} isLoading={isLoading} />
+    </div>
+  )
 }
 
 export default Register

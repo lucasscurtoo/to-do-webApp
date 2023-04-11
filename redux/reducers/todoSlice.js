@@ -172,7 +172,11 @@ const todoSlice = createSlice({
         ),
         (state, action) => {
           console.log(action)
-          state.error = { state: true, message: action?.payload?.data?.message }
+          state.error = {
+            state: true,
+            message:
+              action?.payload?.data?.message || action.payload.data.error,
+          }
           state.loading = false
         }
       )

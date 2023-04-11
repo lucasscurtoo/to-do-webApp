@@ -63,6 +63,11 @@ const List = ({ currentList, list, darkmode, onClose }) => {
         handleMobileClose()
       }}
       onRename={() => setListToEdit(list)}
+      className={
+        listToEdit
+          ? "border-b-2 !bg-blue-100 dark:!bg-blue-200 border-solid border-blue-600"
+          : null
+      }
     >
       <DocumentIcon
         stroke={isSelected ? (darkmode ? "white" : "black") : "gray"}

@@ -2,19 +2,16 @@ import { memo } from "react"
 import OptionsMenu from "./OptionsMenu"
 import { EllipsisHorizontalIcon } from "@heroicons/react/24/outline"
 
-const ListItem = ({ isSelected, children, onClick, onDelete, onRename }) => {
-  const textColor = isSelected ? "text-black" : "text-mediumGray"
-
+const ListItem = ({ className, children, onClick, onDelete, onRename }) => {
   return (
-    <div className="items-center flex w-full">
-      <div
-        className="flex w-full items-center menuLeftListHovers py-2"
-        onClick={onClick}
-      >
+    <div
+      className={`items-center flex w-full  menuLeftListHovers ${className}`}
+    >
+      <div className="flex w-full items-center py-2" onClick={onClick}>
         {children}
       </div>
       <OptionsMenu onDelete={onDelete} onRename={onRename}>
-        <EllipsisHorizontalIcon className="w-8 ml-auto mr-4" />
+        <EllipsisHorizontalIcon className="w-8 ml-auto mr-4 hover:text-gray-800 cursor-pointer hover:dark:text-gray-100" />
       </OptionsMenu>
     </div>
   )

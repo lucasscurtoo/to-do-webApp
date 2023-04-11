@@ -35,7 +35,7 @@ const ToDoComponent = ({ isMobileState, darkmode }) => {
       <BackgroundImage />
       <ShowError />
       <div className="black-overlay w-full h-full flex z-10 relative">
-        <div className="md:bg-secondGrayColor md:dark:bg-secondDarkColor w-full h-full md:w-4/5 md:h-90% m-auto flex">
+        <div className="md:bg-secondGrayColor md:dark:bg-secondDarkColor w-full h-full md:w-4/5 md:h-90% m-auto flex rounded-lg select-none">
           {!closeMenu && (
             <div className="w-full md:w-1/3 lg:w-1/6 h-full flex absolute md:static">
               <LeftMenu closeMenu={handleCloseMenu} lists={lists} />
@@ -56,10 +56,16 @@ const ToDoComponent = ({ isMobileState, darkmode }) => {
                     className="w-6 text-mediumGray hover:text-black dark:hover:text-white transition-all duration-300 hover:rotate-180"
                     onClick={handleCloseMenu}
                   />
-                  <h1 className="text-mediumGray">{currentList?.title}</h1>
+                  <div className="flex space-x-2">
+                    <h1 className="text-black dark:text-white">List:/n</h1>
+                    <h2 className="text-mediumGray">{currentList?.title}</h2>
+                  </div>
                 </div>
               ) : (
-                <h1 className="text-mediumGray">{currentList?.title}</h1>
+                <div className="flex space-x-2">
+                  <h1 className="text-black dark:text-white">List:</h1>
+                  <h2 className="text-mediumGray">{currentList?.title}</h2>
+                </div>
               )}
               <div className="mx-auto">
                 <FetchingProgressBar width="100vw" />

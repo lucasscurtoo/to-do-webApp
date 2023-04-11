@@ -12,12 +12,12 @@ const DarkMode = ({ username, darkmode }) => {
     <>
       {darkmode ? (
         <SunIcon
-          className="w-8 text-mediumGray hover:text-white"
+          className="w-8 text-mediumGray hover:text-white cursor-pointer"
           onClick={handledarkmode}
         />
       ) : (
         <MoonIcon
-          className="w-8 text-mediumGray hover:text-black"
+          className="w-8 text-mediumGray hover:text-black cursor-pointer"
           onClick={handledarkmode}
         />
       )}

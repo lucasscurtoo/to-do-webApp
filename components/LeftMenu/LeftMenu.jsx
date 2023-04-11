@@ -20,7 +20,7 @@ const LeftMenu = ({ closeMenu, lists }) => {
   }
 
   return (
-    <div className="bg-white dark:bg-primaryDarkColor w-2/4 md:w-full h-screen md:h-full shadow-lg absolute z-50 md:static">
+    <div className="bg-white dark:bg-primaryDarkColor w-2/4 md:w-full h-screen md:h-full shadow-lg absolute z-50 md:static rounded-s-lg">
       <div className="py-6 px-4 h-full flex flex-col menuLeftCounters">
         <section
           onClick={closeMenu}
@@ -41,10 +41,10 @@ const LeftMenu = ({ closeMenu, lists }) => {
               onClose={closeMenu}
             />
           ))}
-          <section className="flex mt-8">
-            <PlusIcon className="w-6 ml-2 text-blueColor" />
+          <section className="flex mt-8 group">
+            <PlusIcon className="w-6 ml-2 text-blueColor group-hover:text-sky-700" />
             <input
-              className="ml-2 w-36 bg-transparent placeholder:text-blueColor font-thin placeholders text-black dark:text-white"
+              className="ml-2 w-36 bg-transparent placeholder:text-blueColor group-hover:placeholder:text-sky-700 font-thin placeholders text-black dark:text-white"
               onKeyDown={handleKeyDown}
               ref={newList}
               placeholder="Create a new list"

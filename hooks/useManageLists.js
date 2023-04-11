@@ -27,15 +27,18 @@ const useListManagement = () => {
   }
 
   const handleEditUserList = (listName, newListName) => {
-    if (listName != newListName) {
-      editUserList({ oldTitle: listName, newTitle: newListName, username })
-    } else {
-      dispatch(
-        setErrorState({
-          state: true,
-          message: "Can'not set the same list name, please provide another one",
-        })
-      )
+    if (listName && newListName) {
+      if (listName != newListName) {
+        editUserList({ oldTitle: listName, newTitle: newListName, username })
+      } else {
+        dispatch(
+          setErrorState({
+            state: true,
+            message:
+              "Can'not set the same list name, please provide another one",
+          })
+        )
+      }
     }
   }
 

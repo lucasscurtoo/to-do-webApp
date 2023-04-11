@@ -57,13 +57,29 @@ const ToDoComponent = ({ isMobileState, darkmode }) => {
                     onClick={handleCloseMenu}
                   />
                   <div className="flex space-x-2">
-                    <h1 className="text-black dark:text-white">List:/n</h1>
+                    <h1
+                      className={
+                        isMobileState
+                          ? "text-white"
+                          : "text-black dark:text-white"
+                      }
+                    >
+                      List:
+                    </h1>
                     <h2 className="text-mediumGray">{currentList?.title}</h2>
                   </div>
                 </div>
               ) : (
                 <div className="flex space-x-2">
-                  <h1 className="text-black dark:text-white">List:</h1>
+                  <h1
+                    className={
+                      isMobileState
+                        ? "text-white"
+                        : "text-black dark:text-white"
+                    }
+                  >
+                    List:
+                  </h1>
                   <h2 className="text-mediumGray">{currentList?.title}</h2>
                 </div>
               )}

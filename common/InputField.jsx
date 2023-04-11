@@ -25,7 +25,9 @@ const InputField = ({
         />
         {icon && icon}
       </div>
-      {error && touched && <p className="text-red-500 text-sm mt-1">{error}</p>}
+      {error && touched && (
+        <p className="text-errorColor text-sm mt-1">{error}</p>
+      )}
     </div>
   )
 }

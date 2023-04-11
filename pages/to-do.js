@@ -18,10 +18,10 @@ const ToDo = () => {
   const username = useSelector((state) => state.userReducer.username)
   const isLoggedIn = useSelector((state) => state.userReducer.isLoggedIn)
   const { isSuccess: darkmodeCompleted } = useGetUserDarkModeQuery(username, {
-    skip: !isLoggedIn,
+    skip: !username,
   })
   const { isSuccess: listsCompleted } = useGetUserListsQuery(username, {
-    skip: !isLoggedIn,
+    skip: !username,
   })
   const { isMobileState } = useIsMobile()
   setNextTheme(darkmode)

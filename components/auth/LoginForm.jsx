@@ -94,7 +94,7 @@ const LoginForm = ({ onSubmit, isLoading }) => {
                 className="text-lg md:text-md text-gray-300 hover:text-white"
                 href="/register"
               >
-                Create Now
+                Sign Up
               </Link>
             </section>
             <BarLoader color="#00d7ee" loading={isLoading} width={200} />

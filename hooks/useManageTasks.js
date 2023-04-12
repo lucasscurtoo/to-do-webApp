@@ -1,4 +1,5 @@
 import { useDispatch, useSelector } from "react-redux"
+import { removeTrailingSpace } from "../helpers/functions"
 import {
   useCompleteOrDecompleteTaskMutation,
   useCreateTaskMutation,
@@ -16,11 +17,14 @@ const useManageTasks = (todo) => {
   const dispatch = useDispatch()
 
   const handleCreateTask = (currentList, newTaskDesc) => {
-    if (!currentList.todo.some((elem) => elem.description === newTaskDesc)) {
+    const normalizedTaskDesc = removeTrailingSpace(newTaskDesc)
+    if (
+      !currentList.todo.some((elem) => elem.description === normalizedTaskDesc)
+    ) {
       createNewTask({
         title: currentList.title,
         completed: false,
-        description: newTaskDesc,
+        description: normalizedTaskDesc,
         username,
       })
     } else {
@@ -31,13 +35,13 @@ const useManageTasks = (todo) => {
   }
 
   const handleTaskChange = (event) => {
-    const newDescription = event.target.value
-    if (todo.description != newDescription) {
+    const normalizedTaskDesc = removeTrailingSpace(event.target.value)
+    if (todo.description != normalizedTaskDesc) {
       updateTask({
         title: todo.title,
         completed: todo.completed,
         description: todo.description,
-        newDescription,
+        newDescription: normalizedTaskDesc,
         username,
       })
     }

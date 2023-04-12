@@ -10,6 +10,13 @@ const InputField = ({
   touched,
   icon,
 }) => {
+  const handleKeyPress = (event) => {
+    const keyPressed = event.key
+    if (keyPressed === " ") {
+      event.preventDefault()
+    }
+  }
+
   return (
     <div className="w-full md:w-2/4 flex flex-col mt-8">
       <label className="mb-1 font-medium text-white">{label}</label>
@@ -22,6 +29,7 @@ const InputField = ({
           value={value}
           onChange={onChange}
           onBlur={onBlur}
+          onKeyDown={handleKeyPress}
         />
         {icon && icon}
       </div>

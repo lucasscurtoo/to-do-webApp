@@ -21,6 +21,13 @@ export const checkIfChanged = (prevValue, newValue) => {
     return true
   }
 }
+export const removeTrailingSpace = (inputValue) => {
+  if (inputValue.endsWith(" ")) {
+    return inputValue.slice(0, -1)
+  } else {
+    return inputValue
+  }
+}
 
 export const tokenErrorHandler =
   ({ dispatch }) =>

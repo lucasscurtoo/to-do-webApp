@@ -3,8 +3,10 @@ import LogoToDo from "../public/logo-todo.png"
 import Image from "next/image"
 import { BarLoader } from "react-spinners"
 import { memo } from "react"
+import { useRedirect } from "../hooks/useRedirect"
 
 const LoadingScreen = () => {
+  useRedirect()
   return (
     <div className="w-screen h-screen">
       <BackgroundImage />

@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux"
-import { checkIfExists } from "../helpers/functions"
+import { checkIfExists, removeTrailingSpace } from "../helpers/functions"
 import {
   useCreateUserListMutation,
   useDeleteUserListMutation,
@@ -17,19 +17,25 @@ const useListManagement = () => {
 
   const createNewList = (listName) => {
     const listExists = checkIfExists(lists, listName)
+    const normalizedListName = removeTrailingSpace(listName)
     if (listExists) {
       dispatch(
         setErrorState({ state: true, message: "The list already exists" })
       )
     } else {
-      createUserList({ title: listName, username })
+      createUserList({ title: normalizedListName, username })
     }
   }
 
   const handleEditUserList = (listName, newListName) => {
     if (listName && newListName) {
       if (listName != newListName) {
-        editUserList({ oldTitle: listName, newTitle: newListName, username })
+        const normalizedListName = removeTrailingSpace(newListName)
+        editUserList({
+          oldTitle: listName,
+          newTitle: normalizedListName,
+          username,
+        })
       } else {
         dispatch(
           setErrorState({

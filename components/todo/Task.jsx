@@ -13,7 +13,7 @@ const Task = ({ todo }) => {
 
   const handleEnter = (event) => {
     if (event.key === "Enter") {
-      handleTaskChange()
+      handleTaskChange(event)
     }
   }
 

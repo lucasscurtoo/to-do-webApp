@@ -4,9 +4,11 @@ import { useFormik } from "formik"
 import { registerValidation } from "../../helpers/validation"
 import { EyeSlashIcon, EyeIcon } from "@heroicons/react/24/outline"
 import { BarLoader } from "react-spinners"
-import InputField from "../../common/InputField"
-import BackgroundImage from "../BackgroundImage"
-import ShowError from "../ShowError"
+import dynamic from "next/dynamic"
+
+const ShowError = dynamic(() => import("../ShowError"))
+const BackgroundImage = dynamic(() => import("../BackgroundImage"))
+const InputField = dynamic(() => import("../../common/InputField"))
 
 const RegisterForm = ({ onSubmit, isLoading }) => {
   const [showPassword, setShowPassword] = useState(false)

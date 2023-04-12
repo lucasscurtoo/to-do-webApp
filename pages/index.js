@@ -1,6 +1,6 @@
 import Head from "next/head"
 import { useRouter } from "next/router"
-import { useEffect } from "react"
+import { memo, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import LoginForm from "../components/auth/LoginForm"
 import { useLoginMutation } from "../redux/api/userAuth"
@@ -28,7 +28,7 @@ const Home = () => {
       )
       dispatch(setJwtExpired(false))
     }
-  }, [isRedirected])
+  }, [isRedirected, jwtExpired])
 
   const onSubmit = async (values) => {
     try {
@@ -51,4 +51,4 @@ const Home = () => {
   )
 }
 
-export default Home
+export default memo(Home)

@@ -26,7 +26,9 @@ export const tokenErrorHandler =
   ({ dispatch }) =>
   (next) =>
   (action) => {
+    console.log(action)
     if (action.payload && action.payload.status === 401) {
+      console.log("hoilaaa")
       dispatch(setJwtExpired(true))
       dispatch(logOut())
       dispatch(clearUserData())

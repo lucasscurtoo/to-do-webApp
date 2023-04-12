@@ -1,5 +1,5 @@
-import { ChevronRightIcon } from "@heroicons/react/24/outline"
-import { useMemo, useState, useCallback, useEffect } from "react"
+import ChevronRightIcon from "@heroicons/react/24/outline/ChevronRightIcon"
+import { useMemo, useState, useEffect } from "react"
 import { useSelector } from "react-redux"
 import BackgroundImage from "../BackgroundImage"
 import CompletedTasks from "../todo/CompletedTasks"

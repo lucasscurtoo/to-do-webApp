@@ -1,4 +1,4 @@
-import { TrashIcon } from "@heroicons/react/24/outline"
+import TrashIcon from "@heroicons/react/24/outline/TrashIcon"
 import { useState } from "react"
 import useManageTasks from "../../hooks/useManageTasks"
 

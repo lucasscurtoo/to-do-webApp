@@ -2,10 +2,12 @@ import Head from "next/head"
 import { useRouter } from "next/router"
 import { memo, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import LoginForm from "../components/auth/LoginForm"
 import { useLoginMutation } from "../redux/api/userAuth"
 import { setErrorState } from "../redux/reducers/todoSlice"
 import { setJwtExpired, setRedirected } from "../redux/reducers/userSlice"
+import dynamic from "next/dynamic"
+
+const LoginForm = dynamic(() => import("../components/auth/LoginForm"))
 
 const Home = () => {
   const isRedirected = useSelector((state) => state.userReducer.isRedirected)
